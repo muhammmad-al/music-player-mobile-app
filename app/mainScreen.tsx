@@ -23,6 +23,11 @@ export default function MainScreen() {
           onPress={() => navigation.navigate('SignUp')}
           color="#1E90FF"
         />
+        <Button 
+          title="Profile" //for testing - should later be deleted
+          onPress={() => navigation.navigate('Profile')}
+          color="#1E90FF"
+        />
       </View>
     </View>
   );
@@ -43,6 +48,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '80%',
     justifyContent: 'space-around',
-    height: 100,
+    height: 150, //adjust height to fit new button
   },
 });
