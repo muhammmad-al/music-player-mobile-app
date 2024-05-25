@@ -9,6 +9,26 @@ import ProfileScreen from './profileScreen';
 import { RootStackParamList } from '@/types/type';
 import { Button } from 'react-native';
 
+// Import the functions you need from the SDKs you need
+import { initializeApp } from 'firebase/app';
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyA8hr1oOEwu4w4bMQwRTiQjNNwHJzZktkY",
+  authDomain: "soundrevive-91d60.firebaseapp.com",
+  projectId: "soundrevive-91d60",
+  storageBucket: "soundrevive-91d60.appspot.com",
+  messagingSenderId: "341252652672",
+  appId: "1:341252652672:web:9f3c574e1ca02a59f97065"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+console.log(app);
+
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
