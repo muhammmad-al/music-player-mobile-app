@@ -1,15 +1,23 @@
 import React from 'react';
 import { Image, StyleSheet, View, Button } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { RootStackParamList } from '../types/type';
+
+
 
 export default function MainScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={['#00C7FF', '#00C9FF', '#00D1FF', '#00A5FF', '#00A3FF']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.container}
+    >
       <Image
-        source={require('@/assets/images/musicApp-Icon.png')}
+        source={require('@/assets/images/main_page_pic.png')}
         style={styles.musicLogo}
       />
       <View style={styles.buttonContainer}>
@@ -29,7 +37,7 @@ export default function MainScreen() {
           color="#1E90FF"
         />
       </View>
-    </View>
+    </LinearGradient>
   );
 }
 
@@ -38,12 +46,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
   },
   musicLogo: {
-    height: 350,
-    width: 400,
-    marginBottom: 40,
+    height: 120,
+    width: 100,
+    marginBottom: 300,
   },
   buttonContainer: {
     width: '80%',
@@ -51,3 +58,4 @@ const styles = StyleSheet.create({
     height: 150, //adjust height to fit new button
   },
 });
+

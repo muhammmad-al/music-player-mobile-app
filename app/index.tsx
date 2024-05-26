@@ -8,6 +8,10 @@ import SignUpScreen from './signupScreen';
 import ProfileScreen from './profileScreen';
 import { RootStackParamList } from '@/types/type';
 import { Button } from 'react-native';
+import firebase from 'firebase/app';
+import 'firebase/auth'; // // for authentication
+import 'firebase/firestore'; // for firestore
+import 'firebase/storage'; // for storage
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
