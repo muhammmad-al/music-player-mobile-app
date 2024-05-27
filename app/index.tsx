@@ -12,6 +12,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth'; // // for authentication
 import 'firebase/firestore'; // for firestore
 import 'firebase/storage'; // for storage
+import MusicUploadScreen from './musicUploadScreen';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
@@ -44,6 +45,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="MusicUpload" component={MusicUploadScreen} />
       </Stack.Navigator>
     </NavigationContainer>
 
