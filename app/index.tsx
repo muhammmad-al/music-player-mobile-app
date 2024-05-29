@@ -7,8 +7,8 @@ import LoginScreen from './loginScreen';
 import SignUpScreen from './signupScreen';
 import ProfileScreen from './profileScreen';
 import { RootStackParamList } from '@/types/type';
-import { Button } from 'react-native';
-
+import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 // TODO: Add SDKs for Firebase products that you want to use
@@ -31,15 +31,15 @@ const app = initializeApp(firebaseConfig);
 console.log(app);
 
 const Stack = createStackNavigator<RootStackParamList>();
-
+const app2 = "test";
 export default function App() {
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="Main">
         <Stack.Screen name="Main" component={MainScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="SignUp"  component={SignUpScreen} initialParams = {{appObject: app}}/>
       </Stack.Navigator>
     </NavigationContainer>
 

@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, Button, Text } from 'react-native';
+import {createUserWithEmailAndPassword, onAuthStateChanged, getAuth} from '@firebase/auth';
+import { FirebaseApp } from 'firebase/app';
 
-export default function SignUpScreen() {
+export default function SignUpScreen(props: {}) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const app = props.route.params.appObject
+  
+  const auth = getAuth(app);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
@@ -30,7 +35,11 @@ export default function SignUpScreen() {
       />
       <Button
         title="Sign Up"
-        onPress={() => { /* handle sign up */ }}
+        onPress={ async () => {
+          await createUserWithEmailAndPassword(auth, email, password).catch(e => {console.log(e)});
+          props.navigation.navigate('Main')
+          
+        }}
         color="#1E90FF"
       />
     </View>
