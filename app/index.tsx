@@ -8,7 +8,12 @@ import SignUpScreen from './signupScreen';
 import ProfileScreen from './profileScreen';
 import { RootStackParamList } from '@/types/type';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';import firebase from 'firebase/app';
+import 'firebase/auth'; // // for authentication
+import 'firebase/firestore'; // for firestore
+import 'firebase/storage'; // for storage
+import MusicUploadScreen from './musicUploadScreen';
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 // TODO: Add SDKs for Firebase products that you want to use
@@ -40,6 +45,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="SignUp"  component={SignUpScreen} initialParams = {{appObject: app}}/>
+        <Stack.Screen name="MusicUpload" component={MusicUploadScreen} />
       </Stack.Navigator>
     </NavigationContainer>
 
