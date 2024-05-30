@@ -6,10 +6,11 @@ import MainScreen from './mainScreen';
 import LoginScreen from './loginScreen';
 import SignUpScreen from './signupScreen';
 import ProfileScreen from './profileScreen';
+import MusicPlayerScreen from './MusicPlayerScreen';
 import { RootStackParamList } from '@/types/type';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';import firebase from 'firebase/app';
-import 'firebase/auth'; // // for authentication
+import 'firebase/auth'; // for authentication
 import 'firebase/firestore'; // for firestore
 import 'firebase/storage'; // for storage
 import MusicUploadScreen from './musicUploadScreen';
@@ -46,6 +47,7 @@ export default function App() {
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="SignUp"  component={SignUpScreen} initialParams = {{appObject: app}}/>
         <Stack.Screen name="MusicUpload" component={MusicUploadScreen} />
+        <Stack.Screen name="MusicPlayer" component={MusicPlayerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
 

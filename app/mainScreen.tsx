@@ -29,6 +29,9 @@ export default function MainScreen() {
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Profile')}>
           <Text style={styles.buttonText}>Profile</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MusicPlayer')}>
+          <Text style={styles.buttonText}>Music Player</Text>
+        </TouchableOpacity>
       </View>
     </LinearGradient>
   );
@@ -54,7 +57,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '80%',
     justifyContent: 'space-around',
-    height: 250, // Increased height to add space between buttons
+    height: 350, // Increased height to add space between buttons
   },
   button: {
     backgroundColor: '#FF7F50',
@@ -70,4 +73,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-

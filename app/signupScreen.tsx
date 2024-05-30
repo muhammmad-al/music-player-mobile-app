@@ -13,8 +13,6 @@ export default function SignUpScreen(props: {}) {
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
   const app = props.route.params.appObject
   
   const auth = getAuth(app);
