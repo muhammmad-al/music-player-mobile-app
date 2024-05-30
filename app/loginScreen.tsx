@@ -3,13 +3,17 @@ import { StyleSheet, View, TextInput, Button, Text, TouchableOpacity } from 'rea
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/type';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';import firebase from 'firebase/app';
 
-export default function LoginScreen() {
-  const [username, setUsername] = useState('');
+export default function LoginScreen(props: {}) {
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  const app = props.route.params.appObject;
+
+  const auth = getAuth(app);
   return (
     <LinearGradient
       colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
@@ -21,9 +25,9 @@ export default function LoginScreen() {
         <Text style={styles.title}>Log In</Text>
         <TextInput
           style={styles.input}
-          placeholder="Username"
-          value={username}
-          onChangeText={setUsername}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
         />
         <TextInput
           style={styles.input}
@@ -34,7 +38,10 @@ export default function LoginScreen() {
         />
         <Button
           title="Log In"
-          onPress={() => { /* handle login */ }}
+          onPress={async () => { 
+            await signInWithEmailAndPassword(auth, email, password).catch(e => {console.log(e)})
+            props.navigation.navigate('mainScreen')
+          }}
           color="#1E90FF"
         />
       </View>
