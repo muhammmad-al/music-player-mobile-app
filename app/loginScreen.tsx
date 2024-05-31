@@ -41,7 +41,7 @@ export default function LoginScreen(props) {
           title="Log In"
           onPress={async () => { 
             await signInWithEmailAndPassword(auth, email, password).catch(e => {console.log(e)})
-            props.navigation.navigate('Main')
+            props.navigation.navigate('MusicPlayer')
           }}
           color="#1E90FF"
         />
