@@ -5,6 +5,7 @@ export type RootStackParamList = {
   SignUp: undefined;
   Profile: undefined;
   MusicUpload: undefined;
+  MusicPlayer: undefined;
 };
 
   
