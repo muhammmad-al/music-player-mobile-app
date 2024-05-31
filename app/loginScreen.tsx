@@ -5,13 +5,14 @@ import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/type';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';import firebase from 'firebase/app';
 
-export default function LoginScreen(props: {}) {
+export default function LoginScreen(props) {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const app = props.route.params.appObject;
+  console.log(props.route.params);
+  const app = props.appObject;
 
   const auth = getAuth(app);
   return (
@@ -40,7 +41,7 @@ export default function LoginScreen(props: {}) {
           title="Log In"
           onPress={async () => { 
             await signInWithEmailAndPassword(auth, email, password).catch(e => {console.log(e)})
-            props.navigation.navigate('mainScreen')
+            props.navigation.navigate('Main')
           }}
           color="#1E90FF"
         />
