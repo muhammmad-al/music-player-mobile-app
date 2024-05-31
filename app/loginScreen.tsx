@@ -4,17 +4,38 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/type';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';import firebase from 'firebase/app';
+import * as SecureStore from 'expo-secure-store';
 
-export default function LoginScreen(props) {
+interface LoginScreenProps{
+  navigation: any;
+  saveToken: (token: string) => void;
+  appObject: any;
+}
+
+const saveTokenToSecureStorage = async (token: string) => {
+  await SecureStore.setItemAsync('token', token);
+}
+export default function LoginScreen(props: LoginScreenProps) {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const app = props.appObject;
+  const auth = getAuth(app);
 
   console.log(props.route.params);
-  const app = props.appObject;
 
-  const auth = getAuth(app);
+  const handleLogin = () => {async () => { 
+    try{
+      await signInWithEmailAndPassword(auth, email, password);
+      const token = 'dummy_token';
+      await saveTokenToSecureStorage(token);
+      props.navigation.navigate('MusicPlayer')
+    } catch (e){
+      console.log(e);
+    }
+  };
+}
+
   return (
     <LinearGradient
       colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
@@ -39,10 +60,7 @@ export default function LoginScreen(props) {
         />
         <Button
           title="Log In"
-          onPress={async () => { 
-            await signInWithEmailAndPassword(auth, email, password).catch(e => {console.log(e)})
-            props.navigation.navigate('MusicPlayer')
-          }}
+          onPress={handleLogin}
           color="#1E90FF"
         />
       </View>
