@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     marginBottom: 50, // Adjusted to make space for the buttons
   },
   buttonContainer: {
-    width: '80%',
+    width: '70%',
     justifyContent: 'space-around',
     height: 350, // Increased height to add space between buttons
   },

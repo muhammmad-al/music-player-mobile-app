@@ -6,6 +6,10 @@ export type RootStackParamList = {
   Profile: undefined;
   MusicUpload: undefined;
   MusicPlayer: undefined;
+  EditProfile: {
+    profileImage: string;
+    setProfileImage: React.Dispatch<React.SetStateAction<string>>;
+  };
 };
 
   
