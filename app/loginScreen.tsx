@@ -3,8 +3,20 @@ import { StyleSheet, View, TextInput, Button, Text, TouchableOpacity } from 'rea
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/type';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';import firebase from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';import firebase, { initializeApp } from 'firebase/app';
 import * as SecureStore from 'expo-secure-store';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB4RR8z55G29L0hweKx72P2dsE07e04CTg",
+  authDomain: "musicdistribution-fea87.firebaseapp.com",
+  projectId: "musicdistribution-fea87",
+  storageBucket: "musicdistribution-fea87.appspot.com",
+  messagingSenderId: "286063233697",
+  appId: "1:286063233697:web:22da5691adaf320142fee0",
+  measurementId: "G-0R3BBY9TJ6"
+};
+
+const app = initializeApp(firebaseConfig);
 
 interface LoginScreenProps{
   navigation: any;
@@ -15,21 +27,20 @@ interface LoginScreenProps{
 const saveTokenToSecureStorage = async (token: string) => {
   await SecureStore.setItemAsync('token', token);
 }
-export default function LoginScreen(props: LoginScreenProps) {
+export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const app = props.appObject;
   const auth = getAuth(app);
 
-  console.log(props.route.params);
+  // console.log(props.route.params);
 
   const handleLogin = () => {async () => { 
     try{
       await signInWithEmailAndPassword(auth, email, password);
       const token = 'dummy_token';
       await saveTokenToSecureStorage(token);
-      props.navigation.navigate('MusicPlayer')
+      navigation.navigate('MusicPlayer')
     } catch (e){
       console.log(e);
     }

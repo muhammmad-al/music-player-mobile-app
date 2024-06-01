@@ -1,19 +1,34 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, Button, Text, TouchableOpacity } from 'react-native';
 import {createUserWithEmailAndPassword, onAuthStateChanged, getAuth} from '@firebase/auth';
-import { FirebaseApp } from 'firebase/app';
+import { FirebaseApp, initializeApp } from 'firebase/app';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/type';
 
-export default function SignUpScreen(props: {}) {
+const firebaseConfig = {
+  apiKey: "AIzaSyB4RR8z55G29L0hweKx72P2dsE07e04CTg",
+  authDomain: "musicdistribution-fea87.firebaseapp.com",
+  projectId: "musicdistribution-fea87",
+  storageBucket: "musicdistribution-fea87.appspot.com",
+  messagingSenderId: "286063233697",
+  appId: "1:286063233697:web:22da5691adaf320142fee0",
+  measurementId: "G-0R3BBY9TJ6"
+};
+
+export interface SignUpScreenProps {
+  app: any;
+  navigation: any;
+};
+
+const app = initializeApp(firebaseConfig);
+
+export default function SignUpScreen() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
-  const app = props.route.params.appObject
   
   const auth = getAuth(app);
   return (
@@ -48,7 +63,7 @@ export default function SignUpScreen(props: {}) {
           title="Sign Up"
           onPress={ async () => {
           await createUserWithEmailAndPassword(auth, email, password).catch(e => {console.log(e)});
-          props.navigation.navigate('Main')
+          navigation.navigate('Main')
           
         }}
           color="#1E90FF"
