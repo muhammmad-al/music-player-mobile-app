@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Button, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native';
 import { Audio } from 'expo-av';
 import axios from 'axios';
 
@@ -10,6 +10,9 @@ type Track = {
   id: string;
   name: string;
   audio: string;
+  artist_name: string;
+  album_name: string;
+  genre: string;
 };
 
 const MusicPlayerScreen = () => {
@@ -19,10 +22,12 @@ const MusicPlayerScreen = () => {
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchTracks();
-  }, [page]);
+  }, [page, searchTerm]);
 
   const fetchTracks = async () => {
     setLoading(true);
@@ -31,16 +36,20 @@ const MusicPlayerScreen = () => {
         params: {
           client_id: CLIENT_ID,
           format: 'jsonpretty',
-          limit: 50, // Number of tracks to fetch per page
-          offset: (page - 1) * 50, // Calculate offset for pagination
+          limit: 50,
+          offset: (page - 1) * 50, 
+          search: searchTerm, 
         },
       });
       setTracks((prevTracks) => [
         ...prevTracks,
         ...response.data.results.map((track: any) => ({
-          id: track.id,
+          id: `${track.id}-${page}`, 
           name: track.name,
           audio: track.audio,
+          artist_name: track.artist_name,
+          album_name: track.album_name,
+          genre: track.genre || '', 
         })),
       ]);
     } catch (error) {
@@ -74,16 +83,29 @@ const MusicPlayerScreen = () => {
     }
   };
 
+  const handleSearch = () => {
+    setTracks([]); 
+    setPage(1);
+    setSearchTerm(searchQuery); 
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{currentTrack ? currentTrack.name : 'Select a track'}</Text>
       <Button title={isPlaying ? "Stop" : "Play"} onPress={isPlaying ? stopSound : () => playSound(currentTrack as Track)} disabled={!currentTrack} />
+      <TextInput
+        style={styles.searchBar}
+        placeholder="Search by genre, artist, or track name"
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        onSubmitEditing={handleSearch}
+      />
       <FlatList
         data={tracks}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => playSound(item)}>
-            <Text style={styles.trackItem}>{item.name}</Text>
+            <Text style={styles.trackItem}>{item.name} - {item.artist_name}</Text>
           </TouchableOpacity>
         )}
         onEndReached={loadMoreTracks}
@@ -99,10 +121,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 10,
   },
   title: {
     fontSize: 18,
     marginBottom: 10,
+  },
+  searchBar: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingLeft: 8,
+    marginBottom: 10,
+    width: '100%',
   },
   trackItem: {
     fontSize: 16,
