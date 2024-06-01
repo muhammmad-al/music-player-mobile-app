@@ -1,24 +1,20 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import { NavigationContainer, NavigationProp, useNavigation } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import MainScreen from './mainScreen';
 import LoginScreen from './loginScreen';
-import SignUpScreen, {SignUpScreenProps} from './signupScreen';
+import SignUpScreen from './signupScreen';
 import ProfileScreen from './profileScreen';
 import MusicPlayerScreen from './MusicPlayerScreen';
+import MusicUploadScreen from './musicUploadScreen';
+import EditProfileScreen from './editProfile';
 import { RootStackParamList } from '@/types/type';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';import firebase from 'firebase/app';
+
+import { initializeApp } from 'firebase/app';
 import 'firebase/auth'; // for authentication
 import 'firebase/firestore'; // for firestore
 import 'firebase/storage'; // for storage
-import MusicUploadScreen from './musicUploadScreen';
-
-// Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -33,24 +29,20 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-console.log(app);
-
 const Stack = createStackNavigator<RootStackParamList>();
-const app2 = "test";
+
 export default function App() {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
     <NavigationContainer independent={true}>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="Main">
         <Stack.Screen name="Main" component={MainScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="SignUp"  component={SignUpScreen}  />
+        <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="MusicUpload" component={MusicUploadScreen} />
         <Stack.Screen name="MusicPlayer" component={MusicPlayerScreen} />
+        <Stack.Screen name="EditProfile" component={EditProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
-
   );
 }

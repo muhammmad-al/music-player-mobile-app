@@ -40,7 +40,7 @@ export default function LoginScreen() {
       await signInWithEmailAndPassword(auth, email, password);
       const token = 'dummy_token';
       await saveTokenToSecureStorage(token);
-      navigation.navigate('MusicPlayer')
+      navigation.navigate('MusicPlayer');
     } catch (e){
       console.log(e);
     }
