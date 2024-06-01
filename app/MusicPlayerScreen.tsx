@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Button, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Audio } from 'expo-av';
 import axios from 'axios';
 
@@ -17,28 +17,36 @@ const MusicPlayerScreen = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [tracks, setTracks] = useState<Track[]>([]);
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     fetchTracks();
-  }, []);
+  }, [page]);
 
   const fetchTracks = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(API_URL, {
         params: {
           client_id: CLIENT_ID,
           format: 'jsonpretty',
-          limit: 50, // Change this to fetch more tracks
+          limit: 50, // Number of tracks to fetch per page
+          offset: (page - 1) * 50, // Calculate offset for pagination
         },
       });
-      console.log('API Response:', response.data.results); // Debugging line
-      setTracks(response.data.results.map((track: any) => ({
-        id: track.id,
-        name: track.name,
-        audio: track.audio,
-      })));
+      setTracks((prevTracks) => [
+        ...prevTracks,
+        ...response.data.results.map((track: any) => ({
+          id: track.id,
+          name: track.name,
+          audio: track.audio,
+        })),
+      ]);
     } catch (error) {
       console.error('Error fetching tracks:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -60,6 +68,12 @@ const MusicPlayerScreen = () => {
     }
   };
 
+  const loadMoreTracks = () => {
+    if (!loading) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{currentTrack ? currentTrack.name : 'Select a track'}</Text>
@@ -72,6 +86,9 @@ const MusicPlayerScreen = () => {
             <Text style={styles.trackItem}>{item.name}</Text>
           </TouchableOpacity>
         )}
+        onEndReached={loadMoreTracks}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={loading ? <ActivityIndicator size="large" /> : null}
       />
     </View>
   );
