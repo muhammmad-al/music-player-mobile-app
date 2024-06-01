@@ -8,13 +8,18 @@ import * as SecureStore from 'expo-secure-store';
 
 interface LoginScreenProps{
   navigation: any;
-  saveToken: (token: string) => void;
   appObject: any;
 }
 
 const saveTokenToSecureStorage = async (token: string) => {
-  await SecureStore.setItemAsync('token', token);
-}
+  try{
+    await SecureStore.setItemAsync('token', token);
+    console.log('Token Saved');
+  } catch (error){
+    console.error('failed to save token');
+  }
+};
+
 export default function LoginScreen(props: LoginScreenProps) {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -22,19 +27,16 @@ export default function LoginScreen(props: LoginScreenProps) {
   const app = props.appObject;
   const auth = getAuth(app);
 
-  console.log(props.route.params);
-
-  const handleLogin = () => {async () => { 
+  const handleLogin = async () => { 
     try{
-      await signInWithEmailAndPassword(auth, email, password);
-      const token = 'dummy_token';
+      const userCred = await signInWithEmailAndPassword(auth, email, password);
+      const token = await userCred.user.getIdToken();
       await saveTokenToSecureStorage(token);
       props.navigation.navigate('MusicPlayer')
     } catch (e){
-      console.log(e);
+      console.log('Login failed', e);
     }
   };
-}
 
   return (
     <LinearGradient

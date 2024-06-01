@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, {useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import MainScreen from './mainScreen';
@@ -7,14 +7,17 @@ import LoginScreen from './loginScreen';
 import SignUpScreen from './signupScreen';
 import ProfileScreen from './profileScreen';
 import MusicPlayerScreen from './MusicPlayerScreen';
-import { RootStackParamList } from '@/types/type';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';import firebase from 'firebase/app';
+import AuthLoadingScreen from './LoginFlow';
 import 'firebase/auth'; // for authentication
 import 'firebase/firestore'; // for firestore
 import 'firebase/storage'; // for storage
 import MusicUploadScreen from './musicUploadScreen';
-
+import * as SecureStore from 'expo-secure-store';
+import {registerRootComponent} from 'expo';
+import {TokenProvider} from './TokenStuff';
+import MainApp from './index'
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 // TODO: Add SDKs for Firebase products that you want to use
@@ -34,22 +37,80 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-console.log(app);
+export type RootStackParamList = {
+  Main: undefined;
+  Login: undefined;
+  SignUp: {appObject: firebase.FirebaseApp};
+  Profile: undefined;
+  MusicUpload: undefined;
+  MusicPlayer: undefined;
+};
+
+const RootApp = () => (
+  <TokenProvider>
+    <MainApp />
+  </TokenProvider>
+)
+
+registerRootComponent(RootApp)
 
 const Stack = createStackNavigator<RootStackParamList>();
-const app2 = "test";
-export default function App() {
-  return (
-    <NavigationContainer independent={true}>
-      <Stack.Navigator initialRouteName="Main">
-        <Stack.Screen name="Main" component={MainScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="SignUp"  component={SignUpScreen} initialParams = {{appObject: app}}/>
-        <Stack.Screen name="MusicUpload" component={MusicUploadScreen} />
-        <Stack.Screen name="MusicPlayer" component={MusicPlayerScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
 
+const App: React.FC = () => {
+  const[loading, setLoading] = useState(true);
+  const[token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkForToken = async () => {
+      try{
+        const storedToken = await SecureStore.getItemAsync('token');
+        setToken(storedToken);
+        setLoading(false);
+    } catch(error) {
+      console.error("Failed", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+    checkForToken();
+  }, []);
+
+  if(loading){
+    return(
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="0000ff" />
+      </View>
+    );
+  }
+
+  return(
+      <Stack.Navigator initialRouteName={token ? "MusicPlayer" : "Main"}>
+        {token ? (
+          <>
+            <Stack.Screen name="MusicPlayer" component={MusicPlayerScreen} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="MusicUpload" component={MusicUploadScreen} />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Main" component={MainScreen} />
+            <Stack.Screen name="Login">
+            {(props) => <LoginScreen {...props} appObject={app} />}
+            </Stack.Screen>
+            <Stack.Screen name="SignUp" component={SignUpScreen} initialParams={{appObject: app}} />
+          </>
+        )}
+      </Stack.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
+export default App;

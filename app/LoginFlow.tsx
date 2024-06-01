@@ -7,7 +7,7 @@ interface AppState{
     loading: boolean;
     token: string | null;
 }
-export default class App extends Component {
+export default class AuthLoadingScreen extends Component<{}, AppState> {
     constructor(props: {}){
         super(props);
         this.state = {loading: true, token: null};
