@@ -8,6 +8,7 @@ import SignUpScreen from './signupScreen';
 import ProfileScreen from './profileScreen';
 import MusicPlayerScreen from './MusicPlayerScreen';
 import MusicUploadScreen from './musicUploadScreen';
+import DetailedMusicPlayerScreen from './DetailedMusicPlayerScreen';
 import EditProfileScreen from './editProfile';
 import { RootStackParamList } from '@/types/type';
 
@@ -42,6 +43,7 @@ export default function App() {
         <Stack.Screen name="MusicUpload" component={MusicUploadScreen} />
         <Stack.Screen name="MusicPlayer" component={MusicPlayerScreen} />
         <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+        <Stack.Screen name="DetailedMusicPlayerScreen" component={DetailedMusicPlayerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
