@@ -8,8 +8,6 @@ import SignUpScreen from './signupScreen';
 import ProfileScreen from './profileScreen';
 import MusicPlayerScreen from './MusicPlayerScreen';
 import EditProfileScreen from './editProfile';
-import { RootStackParamList } from '@/types/type';
-
 import { View, Text, TextInput, Button, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';import firebase from 'firebase/app';
 import AuthLoadingScreen from './LoginFlow';

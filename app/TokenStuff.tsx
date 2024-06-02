@@ -1,4 +1,4 @@
-import React, {createContext, useState, useEffect, useContext} from 'react';
+import React, {createContext, useState, useEffect, useContext, ReactNode} from 'react';
 import * as SecureStore from 'expo-secure-store';
 
 interface TokenContextType{
@@ -6,9 +6,13 @@ interface TokenContextType{
     setToken: (token: string | null) => void;
 }
 
+interface TokenProviderProp{
+    children: ReactNode;
+}
+
 const TokenContext = createContext<TokenContextType | undefined>(undefined);
 
-export const TokenProvider: React.FC = ({ children }) => {
+export const TokenProvider: React.FC<TokenProviderProp> = ({ children }) => {
     const [token, setToken] = useState<string | null>(null);
 
     useEffect(() => {
