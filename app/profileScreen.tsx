@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, View, Text, TouchableOpacity, Button, ScrollView} from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RootStackParamList } from '@/types/type';
+import {useToken} from './TokenStuff';
 
 export default function ProfileScreen() {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [profileImage, setProfileImage] = useState('');
+    const {logout} = useToken();
+    
+console.log('ProfileScreen: useToken', {logout})
 
     const userName = 'John Doe';
     const userPronouns = 'He/Him';
@@ -19,6 +23,11 @@ export default function ProfileScreen() {
     const userLocation = 'New York, USA';
     const userFavoriteGenre = 'Hip Hop';
 
+    const handleLogout = () => {
+        logout();
+        navigation.navigate('Main');
+    };
+
     return (
         <LinearGradient
             colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
@@ -26,6 +35,7 @@ export default function ProfileScreen() {
             end={{ x: 0, y: 1 }}
             style={styles.container}
         >
+        <ScrollView>
             <View style={styles.header}>
                 <Image
                     source={{ uri: profileImage || 'https://via.placeholder.com/150' }}
@@ -67,7 +77,11 @@ export default function ProfileScreen() {
                 <TouchableOpacity style={styles.actionButton}>
                     <Text style={styles.actionButtonText}>Followed Artists</Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={handleLogout} style={styles.actionButton}> 
+                    <Text style={styles.actionButton}>Logout</Text>
+                 </TouchableOpacity>
             </View>
+         </ScrollView>
         </LinearGradient>
     );
 }

@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import MainScreen from './mainScreen';
@@ -7,6 +7,7 @@ import LoginScreen from './loginScreen';
 import SignUpScreen from './signupScreen';
 import ProfileScreen from './profileScreen';
 import MusicPlayerScreen from './MusicPlayerScreen';
+import DetailedMusicPlayerScreen, {Track} from './DetailedMusicPlayerScreen';
 import EditProfileScreen from './editProfile';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';import firebase from 'firebase/app';
@@ -17,10 +18,11 @@ import 'firebase/storage'; // for storage
 import MusicUploadScreen from './musicUploadScreen';
 import * as SecureStore from 'expo-secure-store';
 import {registerRootComponent} from 'expo';
-import {TokenProvider} from './TokenStuff';
-import MainApp from './index'
+import {TokenProvider, useToken} from './TokenStuff';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
+import {initializeAuth, getReactNativePersistence} from 'firebase/auth'
+import { ReactNativeAsyncStorage } from 'firebase/auth';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -45,28 +47,21 @@ export type RootStackParamList = {
   Profile: undefined;
   MusicUpload: undefined;
   MusicPlayer: undefined;
+  DetailedMusicPlayerScreen: {track: Track};
 };
-
-const RootApp = () => (
-  <TokenProvider>
-    <MainApp />
-  </TokenProvider>
-)
-
-registerRootComponent(RootApp)
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 const App: React.FC = () => {
   const[loading, setLoading] = useState(true);
-  const[token, setToken] = useState<string | null>(null);
-
+  const {token, setToken} = useToken();
+  
   useEffect(() => {
     const checkForToken = async () => {
       try{
         const storedToken = await SecureStore.getItemAsync('token');
+        console.log('Stored Token:', storedToken)
         setToken(storedToken);
-        setLoading(false);
     } catch(error) {
       console.error("Failed", error);
     } finally {
@@ -75,7 +70,11 @@ const App: React.FC = () => {
   };
 
     checkForToken();
-  }, []);
+  }, [setToken]);
+
+  useEffect(()=>{
+    console.log('Token changed:', token);
+  }, [token]);
 
   if(loading){
     return(
@@ -85,6 +84,8 @@ const App: React.FC = () => {
     );
   }
 
+  console.log('Index: Rendering', {token});
+
   return(
       <Stack.Navigator initialRouteName={token ? "MusicPlayer" : "Main"}>
         {token ? (
@@ -92,6 +93,7 @@ const App: React.FC = () => {
             <Stack.Screen name="MusicPlayer" component={MusicPlayerScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="MusicUpload" component={MusicUploadScreen} />
+            <Stack.Screen name="DetailedMusicPlayerScreen" component={DetailedMusicPlayerScreen} />
           </>
         ) : (
           <>
@@ -114,4 +116,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+const RootApp: React.FC = () => (
+  <TokenProvider>
+    <App />
+  </TokenProvider>
+);
+
+export default RootApp;

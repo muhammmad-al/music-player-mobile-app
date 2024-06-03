@@ -5,6 +5,7 @@ import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/type';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';import firebase, { initializeApp } from 'firebase/app';
 import * as SecureStore from 'expo-secure-store';
+import { useToken } from './TokenStuff';
 
 const firebaseConfig = {
   apiKey: "AIzaSyB4RR8z55G29L0hweKx72P2dsE07e04CTg",
@@ -36,13 +37,18 @@ export default function LoginScreen(props: LoginScreenProps) {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const app = props.appObject;
   const auth = getAuth(app);
+  const {setToken} = useToken();
 
   const handleLogin = async () => { 
     try{
       const userCred = await signInWithEmailAndPassword(auth, email, password);
       const token = await userCred.user.getIdToken();
+      console.log('Recieved Token:', token);
       await saveTokenToSecureStorage(token);
+      setToken(token);
+      console.log('LoginScreen: Token set, navigating to musicPlayer');
       navigation.navigate('MusicPlayer');
     } catch (e){
       console.log('Login failed', e);
