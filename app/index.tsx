@@ -23,6 +23,7 @@ import {TokenProvider, useToken} from './TokenStuff';
 import { initializeApp } from 'firebase/app';
 import {initializeAuth, getReactNativePersistence} from 'firebase/auth'
 import { ReactNativeAsyncStorage } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -39,6 +40,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
 
 export type RootStackParamList = {
   Main: undefined;
@@ -48,6 +51,10 @@ export type RootStackParamList = {
   MusicUpload: undefined;
   MusicPlayer: undefined;
   DetailedMusicPlayerScreen: {track: Track};
+  EditProfile: {
+    profileImage: string;
+    setProfileImage: React.Dispatch<React.SetStateAction<string>>;
+  };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -94,6 +101,7 @@ const App: React.FC = () => {
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="MusicUpload" component={MusicUploadScreen} />
             <Stack.Screen name="DetailedMusicPlayerScreen" component={DetailedMusicPlayerScreen} />
+            <Stack.Screen name="EditProfile" component={EditProfileScreen} />
           </>
         ) : (
           <>
@@ -118,7 +126,7 @@ const styles = StyleSheet.create({
 
 const RootApp: React.FC = () => (
   <TokenProvider>
-    <App />
+      <App />
   </TokenProvider>
 );
 
