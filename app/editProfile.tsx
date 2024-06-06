@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/types/type';
+import { useNavigation } from 'expo-router';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'EditProfile'>;
 

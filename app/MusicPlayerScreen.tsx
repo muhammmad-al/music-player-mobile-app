@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, TextInput, Image } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Audio } from 'expo-av';
 import axios from 'axios';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/type'; // Adjust the import path as needed
-import ProfileScreen from './profileScreen';
 const API_URL = 'https://api.jamendo.com/v3.0/tracks';
 const CLIENT_ID = '6b05ee0e';
 
@@ -96,10 +96,21 @@ const MusicPlayerScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Button title="Profile" onPress={() => navigation.navigate('Profile')} />
-      <Text style={styles.title}>{currentTrack ? currentTrack.name : 'Select a track'}</Text>
-      <Button title={isPlaying ? "Stop" : "Play"} onPress={isPlaying ? stopSound : () => playSound(currentTrack as Track)} disabled={!currentTrack} />
+    <LinearGradient
+      colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+      style={styles.container}
+    >
+      <TouchableOpacity style={styles.profileButton} onPress={() => navigation.navigate('Profile')}>
+        <Image
+          source={{ uri: 'https://example.com/profile-pic-url' }} // Replace with actual profile picture URL
+          style={styles.profileImage}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.uploadButton} onPress={() => navigation.navigate('MusicUpload')}>
+        <Text style={styles.uploadText}>Upload Music</Text>
+      </TouchableOpacity>
       <TextInput
         style={styles.searchBar}
         placeholder="Search by genre, artist, or track name"
@@ -119,32 +130,60 @@ const MusicPlayerScreen = () => {
         onEndReachedThreshold={0.5}
         ListFooterComponent={loading ? <ActivityIndicator size="large" /> : null}
       />
-    </View>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     padding: 10,
+    backgroundColor: 'transparent',
   },
-  title: {
-    fontSize: 18,
-    marginBottom: 10,
+  profileButton: {
+    position: 'absolute',
+    top: 20,
+    left: 30,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+  profileImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  uploadButton: {
+    position: 'absolute',
+    top: 25, // Adjusted to align vertically as shown in the image
+    left: 160, // Adjusted to align horizontally as shown in the image
+    padding: 25, // Increased padding for a larger button
+    backgroundColor: 'white',
+    borderRadius: 6,
+  },
+  uploadText: {
+    fontSize: 20,
+    fontWeight: 'bold', // Made the text bold
+    color: '#000',
   },
   searchBar: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    paddingLeft: 8,
+    marginTop: 120,
+    height: 50,
+    borderColor: 'black',
+    borderWidth: 2,
+    paddingLeft: 10,
     marginBottom: 10,
-    width: '100%',
+    width: '95%',
+    backgroundColor: 'white',
   },
   trackItem: {
     fontSize: 16,
-    color: 'blue',
+    color: 'black',
     marginVertical: 5,
   },
 });

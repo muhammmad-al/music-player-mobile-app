@@ -26,12 +26,6 @@ export default function MainScreen() {
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignUp')}>
           <Text style={styles.buttonText}>Sign up</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Profile')}>
-          <Text style={styles.buttonText}>Profile</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MusicPlayer')}>
-          <Text style={styles.buttonText}>Music Player</Text>
-        </TouchableOpacity>
       </View>
     </LinearGradient>
   );

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function MusicUploadScreen() {
   const [trackName, setTrackName] = useState('');
@@ -30,8 +31,14 @@ export default function MusicUploadScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Upload Music</Text>
+    <LinearGradient
+      colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+      style={styles.container}
+    >
+      <Image source={require('@/assets/images/main_page_pic.png')} style={styles.logo} />
+      <Text style={styles.title}>Upload Your Music Here</Text>
       <TextInput
         style={styles.input}
         placeholder="Track Name"
@@ -44,12 +51,16 @@ export default function MusicUploadScreen() {
         value={artistName}
         onChangeText={setArtistName}
       />
-      <Button title="Pick a Track" onPress={pickTrack} color="#1E90FF" />
+      <TouchableOpacity style={styles.button} onPress={pickTrack}>
+        <Text style={styles.buttonText}>PICK A TRACK</Text>
+      </TouchableOpacity>
       {trackFile && trackFile.type === 'success' && (
         <Text style={styles.fileName}>{trackFile.name}</Text>
       )}
-      <Button title="Upload" onPress={handleUpload} color="#1E90FF" />
-    </View>
+      <TouchableOpacity style={styles.button} onPress={handleUpload}>
+        <Text style={styles.buttonText}>UPLOAD</Text>
+      </TouchableOpacity>
+    </LinearGradient>
   );
 }
 
@@ -58,20 +69,37 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#A1CEDC',
+  },
+  logo: {
+    width: 100,
+    height: 120,
+    marginBottom: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     marginBottom: 20,
+    color: 'black',
   },
   input: {
     width: '80%',
     height: 40,
-    borderColor: 'gray',
+    borderColor: 'black',
     borderWidth: 1,
     marginBottom: 20,
     paddingLeft: 10,
     backgroundColor: 'white',
+  },
+  button: {
+    width: '80%',
+    height: 40,
+    backgroundColor: '#FF7F50',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: 'black',
+    fontSize: 16,
   },
   fileName: {
     marginTop: 10,

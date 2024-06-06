@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Image, StyleSheet, View, Text, TouchableOpacity, Button, ScrollView} from 'react-native';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { useNavigation, NavigationProp, useRoute } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RootStackParamList } from '@/types/type';
 import {useToken} from './TokenStuff';
@@ -72,7 +72,7 @@ console.log('ProfileScreen: useToken', {logout})
                     <Text style={styles.actionButtonText}>Uploaded Tracks</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.actionButton}>
-                    <Text style={styles.actionButtonText}>Likes and Comments</Text>
+                    <Text style={styles.actionButtonText}>Likes</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.actionButton}>
                     <Text style={styles.actionButtonText}>Followed Artists</Text>
