@@ -4,7 +4,7 @@ import Slider from '@react-native-community/slider';
 import { Audio } from 'expo-av';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList} from '../types/type'; // Adjust the import path as needed
+import { RootStackParamList} from '../types/type'; 
 
 export type Track = {
   id: string;
@@ -26,6 +26,7 @@ const DetailedMusicPlayerScreen: React.FC<Props> = ({ route }) => {
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1.0);
+  const [isLiked, setIsLiked] = useState(false);
 
   const playSound = async () => {
     if (sound) {
@@ -52,6 +53,11 @@ const DetailedMusicPlayerScreen: React.FC<Props> = ({ route }) => {
     }
   };
 
+  const toggleLike = () => {
+    setIsLiked(!isLiked);
+    // Here you would eventually send the like/unlike event to your backend
+  };
+
   return (
     <View style={styles.container}>
       <Image source={{ uri: track.album_cover }} style={styles.albumCover} />
@@ -61,7 +67,9 @@ const DetailedMusicPlayerScreen: React.FC<Props> = ({ route }) => {
         <TouchableOpacity onPress={isPlaying ? stopSound : playSound}>
           <Text style={styles.controlButton}>{isPlaying ? 'Pause' : 'Play'}</Text>
         </TouchableOpacity>
-        {/* Add Skip buttons if you implement skip functionality */}
+        <TouchableOpacity onPress={toggleLike}>
+          <Text style={[styles.controlButton, isLiked && styles.liked]}>{isLiked ? 'Unlike' : 'Like'}</Text>
+        </TouchableOpacity>
       </View>
       <Slider
         style={styles.volumeSlider}
@@ -103,6 +111,9 @@ const styles = StyleSheet.create({
   controlButton: {
     fontSize: 18,
     marginHorizontal: 20,
+  },
+  liked: {
+    color: 'red',
   },
   volumeSlider: {
     width: '80%',
