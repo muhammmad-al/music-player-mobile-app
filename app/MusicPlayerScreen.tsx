@@ -5,6 +5,7 @@ import { Audio } from 'expo-av';
 import axios from 'axios';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/type'; // Adjust the import path as needed
+
 const API_URL = 'https://api.jamendo.com/v3.0/tracks';
 const CLIENT_ID = '6b05ee0e';
 
@@ -18,6 +19,20 @@ type Track = {
   album_cover: string;
 };
 
+const genres = ['rock', 'pop', 'hiphop', 'jazz', 'electronic', 'classical'];
+
+const GenreSelector = ({ onSelectGenre }: { onSelectGenre: (genre: string) => void }) => {
+  return (
+    <View style={styles.genreContainer}>
+      {genres.map((genre) => (
+        <TouchableOpacity key={genre} style={styles.genreButton} onPress={() => onSelectGenre(genre)}>
+          <Text style={styles.genreText}>{genre}</Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+};
+
 const MusicPlayerScreen = () => {
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -27,14 +42,15 @@ const MusicPlayerScreen = () => {
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedGenre, setSelectedGenre] = useState<string>('');
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>(); // Use the typed navigation
 
   useEffect(() => {
-    fetchTracks();
-  }, [page, searchTerm]);
+    fetchTracks(selectedGenre, page);
+  }, [page, searchTerm, selectedGenre]);
 
-  const fetchTracks = async () => {
+  const fetchTracks = async (genre: string = '', page: number) => {
     setLoading(true);
     try {
       const response = await axios.get(API_URL, {
@@ -43,7 +59,7 @@ const MusicPlayerScreen = () => {
           format: 'jsonpretty',
           limit: 50,
           offset: (page - 1) * 50,
-          search: searchTerm,
+          tags: genre,
         },
       });
       setTracks((prevTracks) => [
@@ -54,7 +70,7 @@ const MusicPlayerScreen = () => {
           audio: track.audio,
           artist_name: track.artist_name,
           album_name: track.album_name,
-          genre: track.genre || '',
+          genre: genre, // Add the genre to the track object
           album_cover: track.album_image || '',
         })),
       ]);
@@ -63,6 +79,12 @@ const MusicPlayerScreen = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGenreSelect = (genre: string) => {
+    setTracks([]);
+    setPage(1);
+    setSelectedGenre(genre);
   };
 
   const playSound = async (track: Track) => {
@@ -118,6 +140,7 @@ const MusicPlayerScreen = () => {
         onChangeText={setSearchQuery}
         onSubmitEditing={handleSearch}
       />
+      <GenreSelector onSelectGenre={handleGenreSelect} />
       <FlatList
         data={tracks}
         keyExtractor={(item) => item.id}
@@ -185,6 +208,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
     marginVertical: 5,
+  },
+  genreContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  genreButton: {
+    backgroundColor: '#FF7F50',
+    padding: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
+  },
+  genreText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
 
