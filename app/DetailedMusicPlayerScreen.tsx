@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Audio } from 'expo-av';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList} from '../types/type'; 
-
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { auth, db } from '../app/index';
 export type Track = {
   id: string;
   name: string;
@@ -27,6 +30,30 @@ const DetailedMusicPlayerScreen: React.FC<Props> = ({ route }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1.0);
   const [isLiked, setIsLiked] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() =>{
+      const user = auth.currentUser;
+      if (user){
+        setUserId(user.uid);
+      }
+
+  const fetchLikeStatus = async () => {
+    if (userId) {
+      try{
+        const docRef = doc(db, 'LikeDoc', `${userId}_${track.id}`);
+        const docSnap = await getDoc(docRef)
+        if (docSnap.exists()) {
+          setIsLiked(docSnap.data()?.liked);
+        }
+      } catch (error){
+        console.error('Could not find like status', error);
+      }
+    }
+  }
+
+  fetchLikeStatus();
+}, [track.id, userId]);
 
   const playSound = async () => {
     if (sound) {
@@ -53,9 +80,20 @@ const DetailedMusicPlayerScreen: React.FC<Props> = ({ route }) => {
     }
   };
 
-  const toggleLike = () => {
-    setIsLiked(!isLiked);
-    // Here you would eventually send the like/unlike event to your backend
+  const toggleLike = async () => {
+    if (userId) {
+      try{
+        const docRef = doc(db, 'LikeDoc', `${userId}_${track.id}`);
+        await setDoc(docRef, {
+          userId,
+          trackId: track.id,
+          liked: !isLiked,
+        })
+        setIsLiked(!isLiked);
+      } catch (error){
+        console.error('Error changing like status', error)
+      }
+    } 
   };
 
   return (
