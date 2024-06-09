@@ -44,7 +44,7 @@ const MusicPlayerScreen = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGenre, setSelectedGenre] = useState<string>('');
 
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>(); 
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     fetchTracks(selectedGenre, page);
@@ -70,7 +70,7 @@ const MusicPlayerScreen = () => {
           audio: track.audio,
           artist_name: track.artist_name,
           album_name: track.album_name,
-          genre: genre, 
+          genre: genre,
           album_cover: track.album_image || '',
         })),
       ]);
@@ -140,6 +140,10 @@ const MusicPlayerScreen = () => {
         onChangeText={setSearchQuery}
         onSubmitEditing={handleSearch}
       />
+      <View style={styles.recommendedWrapper}>
+        <Text style={styles.recommendedHeader}>Recommended Tracks</Text>
+      </View>
+      <View style={styles.spaceWrapper} />
       <View style={styles.genreWrapper}>
         <GenreSelector onSelectGenre={handleGenreSelect} />
       </View>
@@ -211,11 +215,22 @@ const styles = StyleSheet.create({
     color: 'black',
     marginVertical: 5,
   },
+  recommendedWrapper: {
+    marginTop: 10, // Adjusted to move right below the search bar
+    paddingHorizontal: 10,
+  },
+  recommendedHeader: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 10,
+  },
+  spaceWrapper: {
+    height: 180, // Adds space for visual display of album covers
+  },
   genreWrapper: {
-    position: 'absolute',
-    top: 180,
-    left: 0,
-    right: 0,
+    marginTop: 10, // Adds space between recommended header and genre buttons
+    paddingHorizontal: 10,
   },
   genreContainer: {
     paddingHorizontal: 10,
@@ -237,7 +252,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   trackListWrapper: {
-    marginTop: 240,
+    marginTop: 20,
     flex: 1,
     width: '100%',
     paddingHorizontal: 10,
