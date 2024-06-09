@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, TextInput, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, TextInput, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Audio } from 'expo-av';
 import axios from 'axios';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '../types/type'; // Adjust the import path as needed
+import { RootStackParamList } from '../types/type';
 
 const API_URL = 'https://api.jamendo.com/v3.0/tracks';
 const CLIENT_ID = '6b05ee0e';
@@ -23,13 +23,13 @@ const genres = ['rock', 'pop', 'hiphop', 'jazz', 'electronic', 'classical'];
 
 const GenreSelector = ({ onSelectGenre }: { onSelectGenre: (genre: string) => void }) => {
   return (
-    <View style={styles.genreContainer}>
+    <ScrollView horizontal={true} style={styles.genreContainer} contentContainerStyle={styles.genreContentContainer} showsHorizontalScrollIndicator={false}>
       {genres.map((genre) => (
         <TouchableOpacity key={genre} style={styles.genreButton} onPress={() => onSelectGenre(genre)}>
           <Text style={styles.genreText}>{genre}</Text>
         </TouchableOpacity>
       ))}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -44,7 +44,7 @@ const MusicPlayerScreen = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGenre, setSelectedGenre] = useState<string>('');
 
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>(); // Use the typed navigation
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>(); 
 
   useEffect(() => {
     fetchTracks(selectedGenre, page);
@@ -70,7 +70,7 @@ const MusicPlayerScreen = () => {
           audio: track.audio,
           artist_name: track.artist_name,
           album_name: track.album_name,
-          genre: genre, // Add the genre to the track object
+          genre: genre, 
           album_cover: track.album_image || '',
         })),
       ]);
@@ -183,15 +183,15 @@ const styles = StyleSheet.create({
   },
   uploadButton: {
     position: 'absolute',
-    top: 25, // Adjusted to align vertically as shown in the image
-    left: 160, // Adjusted to align horizontally as shown in the image
-    padding: 25, // Increased padding for a larger button
+    top: 25,
+    left: 160,
+    padding: 25,
     backgroundColor: 'white',
     borderRadius: 6,
   },
   uploadText: {
     fontSize: 20,
-    fontWeight: 'bold', // Made the text bold
+    fontWeight: 'bold',
     color: '#000',
   },
   searchBar: {
@@ -210,19 +210,25 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   genreContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 20,
+    marginVertical: 10,
+    paddingHorizontal: 10,
+  },
+  genreContentContainer: {
+    alignItems: 'center',
   },
   genreButton: {
     backgroundColor: '#FF7F50',
-    padding: 10,
+    paddingVertical: 15,  
+    paddingHorizontal: 20,
     marginHorizontal: 5,
     borderRadius: 5,
+    minHeight: 50,  
+    justifyContent: 'center',
   },
   genreText: {
     color: 'white',
     fontSize: 16,
+    textAlign: 'center',
   },
 });
 
