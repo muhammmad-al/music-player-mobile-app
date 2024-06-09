@@ -21,11 +21,15 @@ type Track = {
 
 const genres = ['rock', 'pop', 'hiphop', 'jazz', 'electronic', 'classical'];
 
-const GenreSelector = ({ onSelectGenre }: { onSelectGenre: (genre: string) => void }) => {
+const GenreSelector = ({ selectedGenre, onSelectGenre }: { selectedGenre: string; onSelectGenre: (genre: string) => void }) => {
   return (
     <ScrollView horizontal={true} style={styles.genreContainer} contentContainerStyle={styles.genreContentContainer} showsHorizontalScrollIndicator={false}>
       {genres.map((genre) => (
-        <TouchableOpacity key={genre} style={styles.genreButton} onPress={() => onSelectGenre(genre)}>
+        <TouchableOpacity
+          key={genre}
+          style={[styles.genreButton, selectedGenre === genre && styles.selectedGenreButton]}
+          onPress={() => onSelectGenre(genre)}
+        >
           <Text style={styles.genreText}>{genre}</Text>
         </TouchableOpacity>
       ))}
@@ -145,7 +149,7 @@ const MusicPlayerScreen = () => {
       </View>
       <View style={styles.spaceWrapper} />
       <View style={styles.genreWrapper}>
-        <GenreSelector onSelectGenre={handleGenreSelect} />
+        <GenreSelector selectedGenre={selectedGenre} onSelectGenre={handleGenreSelect} />
       </View>
       <View style={styles.trackListWrapper}>
         <FlatList
@@ -245,6 +249,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: 5,
     justifyContent: 'center',
+  },
+  selectedGenreButton: {
+    backgroundColor: '#FF4500', // Different color for selected genre
   },
   genreText: {
     color: 'white',
