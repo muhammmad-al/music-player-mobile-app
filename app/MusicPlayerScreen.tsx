@@ -140,19 +140,23 @@ const MusicPlayerScreen = () => {
         onChangeText={setSearchQuery}
         onSubmitEditing={handleSearch}
       />
-      <GenreSelector onSelectGenre={handleGenreSelect} />
-      <FlatList
-        data={tracks}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => navigation.navigate('DetailedMusicPlayerScreen', { track: item })}>
-            <Text style={styles.trackItem}>{item.name} - {item.artist_name}</Text>
-          </TouchableOpacity>
-        )}
-        onEndReached={loadMoreTracks}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={loading ? <ActivityIndicator size="large" /> : null}
-      />
+      <View style={styles.genreWrapper}>
+        <GenreSelector onSelectGenre={handleGenreSelect} />
+      </View>
+      <View style={styles.trackListWrapper}>
+        <FlatList
+          data={tracks}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => navigation.navigate('DetailedMusicPlayerScreen', { track: item })}>
+              <Text style={styles.trackItem}>{item.name} - {item.artist_name}</Text>
+            </TouchableOpacity>
+          )}
+          onEndReached={loadMoreTracks}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={loading ? <ActivityIndicator size="large" /> : null}
+        />
+      </View>
     </LinearGradient>
   );
 };
@@ -160,9 +164,6 @@ const MusicPlayerScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    padding: 10,
     backgroundColor: 'transparent',
   },
   profileButton: {
@@ -203,14 +204,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: '95%',
     backgroundColor: 'white',
+    alignSelf: 'center',
   },
   trackItem: {
     fontSize: 16,
     color: 'black',
     marginVertical: 5,
   },
+  genreWrapper: {
+    position: 'absolute',
+    top: 180,
+    left: 0,
+    right: 0,
+  },
   genreContainer: {
-    marginVertical: 10,
     paddingHorizontal: 10,
   },
   genreContentContainer: {
@@ -218,17 +225,22 @@ const styles = StyleSheet.create({
   },
   genreButton: {
     backgroundColor: '#FF7F50',
-    paddingVertical: 15,  
+    paddingVertical: 15,
     paddingHorizontal: 20,
     marginHorizontal: 5,
     borderRadius: 5,
-    minHeight: 50,  
     justifyContent: 'center',
   },
   genreText: {
     color: 'white',
     fontSize: 16,
     textAlign: 'center',
+  },
+  trackListWrapper: {
+    marginTop: 240,
+    flex: 1,
+    width: '100%',
+    paddingHorizontal: 10,
   },
 });
 
