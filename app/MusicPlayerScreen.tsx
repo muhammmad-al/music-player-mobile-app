@@ -30,7 +30,7 @@ const GenreSelector = ({ selectedGenre, onSelectGenre }: { selectedGenre: string
           style={[styles.genreButton, selectedGenre === genre && styles.selectedGenreButton]}
           onPress={() => onSelectGenre(genre)}
         >
-          <Text style={styles.genreText}>{genre}</Text>
+          <Text style={[styles.genreText, selectedGenre === genre && styles.selectedGenreText]}>{genre}</Text>
         </TouchableOpacity>
       ))}
     </ScrollView>
@@ -228,18 +228,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
     marginBottom: 10,
+    textAlign: 'center', // Center the text
   },
   spaceWrapper: {
     height: 180, // Adds space for visual display of album covers
   },
   genreWrapper: {
     marginTop: 10, // Adds space between recommended header and genre buttons
-    paddingHorizontal: 10,
   },
   genreContainer: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 0, // Remove padding from the container to manage it individually
   },
   genreContentContainer: {
+    paddingHorizontal: 20, // Apply consistent padding on the content container
     alignItems: 'center',
   },
   genreButton: {
@@ -252,6 +253,10 @@ const styles = StyleSheet.create({
   },
   selectedGenreButton: {
     backgroundColor: '#FF4500', // Different color for selected genre
+  },
+  selectedGenreText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
   genreText: {
     color: 'white',
