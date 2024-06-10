@@ -3,12 +3,10 @@ import { Image, StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'rea
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RootStackParamList } from '@/types/type';
-import { useToken } from './TokenStuff';
+import { router } from 'expo-router';
 
-export default function ProfileScreen() {
-    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+export default function Profile() {
     const [profileImage, setProfileImage] = useState('');
-    const { logout } = useToken();
 
     const userName = 'John Doe';
     const userPronouns = 'He/Him';
@@ -20,11 +18,6 @@ export default function ProfileScreen() {
     const userPhoneNumber = '+1234567890';
     const userLocation = 'New York, USA';
     const userFavoriteGenre = 'Hip Hop';
-
-    const handleLogout = () => {
-        logout();
-        navigation.navigate('Main');
-    };
 
     return (
         <LinearGradient
@@ -49,9 +42,12 @@ export default function ProfileScreen() {
                     <Text style={styles.stat}>{likedSongs} liked songs</Text>
                     <Text style={styles.stat}>{userUploads} uploads</Text>
                 </View>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={styles.editButton} 
-                    onPress={() => navigation.navigate('EditProfile', { profileImage, setProfileImage })}
+                    onPress={
+                        // () => navigation.navigate('EditProfile', { profileImage, setProfileImage })
+                        () => { }
+                    }
                 >
                     <Text style={styles.editButtonText}>Edit Profile</Text>
                 </TouchableOpacity>
@@ -62,30 +58,32 @@ export default function ProfileScreen() {
                     <Text style={styles.detailText}>Favorite Genre: {userFavoriteGenre}</Text>
                 </View>
                 <View style={styles.actions}>
-                    <TouchableOpacity 
-                        style={styles.actionButton} 
-                        onPress={() => navigation.navigate('AllPlaylists')}
+                    <TouchableOpacity
+                        style={styles.actionButton}
+                    // onPress={() => navigation.navigate('AllPlaylists')}
                     >
                         <Text style={styles.actionButtonText}>Play Lists</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={styles.actionButton} 
-                        onPress={() => navigation.navigate('UploadedTracks')}
+                    <TouchableOpacity
+                        style={styles.actionButton}
+                    // onPress={() => navigation.navigate('UploadedTracks')}
                     >
                         <Text style={styles.actionButtonText}>Uploaded Tracks</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={styles.actionButton} 
-                        onPress={() => navigation.navigate('LikedSongs')}
+                    <TouchableOpacity
+                        style={styles.actionButton}
+                    // onPress={() => navigation.navigate('LikedSongs')}
                     >
                         <Text style={styles.actionButtonText}>Liked Songs</Text>
                     </TouchableOpacity>
-                    
-                    <TouchableOpacity onPress={handleLogout} style={styles.actionButton}> 
+
+                    <TouchableOpacity
+                        // onPress={handleLogout} 
+                        style={styles.actionButton}>
                         <Text style={styles.actionButtonText}>Logout</Text>
-                     </TouchableOpacity>
+                    </TouchableOpacity>
                 </View>
-             </ScrollView>
+            </ScrollView>
         </LinearGradient>
     );
 }
@@ -136,7 +134,7 @@ const styles = StyleSheet.create({
     },
     editButtonText: {
         fontSize: 20,
-        color: 'white', 
+        color: 'white',
         fontWeight: 'bold',
     },
     details: {

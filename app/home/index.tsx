@@ -3,8 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, 
 import { LinearGradient } from 'expo-linear-gradient';
 import { Audio } from 'expo-av';
 import axios from 'axios';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '../types/type';
+import { router } from 'expo-router';
 
 const API_URL = 'https://api.jamendo.com/v3.0/tracks';
 const CLIENT_ID = '6b05ee0e';
@@ -37,7 +36,7 @@ const GenreSelector = ({ selectedGenre, onSelectGenre }: { selectedGenre: string
   );
 };
 
-const MusicPlayerScreen = () => {
+export default function Home() {
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [tracks, setTracks] = useState<Track[]>([]);
@@ -48,7 +47,7 @@ const MusicPlayerScreen = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGenre, setSelectedGenre] = useState<string>('');
 
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  //   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     fetchTracks(selectedGenre, page);
@@ -129,17 +128,23 @@ const MusicPlayerScreen = () => {
       style={styles.container}
     >
       <View style={styles.topContainer}>
-        <TouchableOpacity style={styles.profileButton} onPress={() => navigation.navigate('Profile')}>
+        <TouchableOpacity style={styles.profileButton} onPress={
+          () => router.push('/home/profile')
+        }>
           <Image
             source={{ uri: 'https://example.com/profile-pic-url' }} // Replace with actual profile picture URL
             style={styles.profileImage}
           />
         </TouchableOpacity>
         <View style={styles.topButtonsContainer}>
-          <TouchableOpacity style={styles.smallButton} onPress={() => navigation.navigate('MusicUpload')}>
+          <TouchableOpacity style={styles.smallButton} onPress={
+            () => router.push('/home/upload')
+          }>
             <Text style={styles.smallButtonText}>Upload Music</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.smallButton} onPress={() => navigation.navigate('Playlist')}>
+          <TouchableOpacity style={styles.smallButton} onPress={
+            () => router.push('/home/create-playlists')
+          }>
             <Text style={styles.smallButtonText}>Make Playlist</Text>
           </TouchableOpacity>
         </View>
@@ -163,7 +168,10 @@ const MusicPlayerScreen = () => {
           data={tracks}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => navigation.navigate('DetailedMusicPlayerScreen', { track: item })}>
+            <TouchableOpacity onPress={
+              // () => navigation.navigate('DetailedMusicPlayerScreen', { track: item })
+              () => { }
+            }>
               <Text style={styles.trackItem}>{item.name} - {item.artist_name}</Text>
             </TouchableOpacity>
           )}
@@ -282,5 +290,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
 });
-
-export default MusicPlayerScreen;
