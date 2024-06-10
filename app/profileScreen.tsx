@@ -13,7 +13,7 @@ export default function ProfileScreen() {
     const userName = 'John Doe';
     const userPronouns = 'He/Him';
     const userBio = 'Music enthusiast';
-    const userFollowers = 120;
+    const likedSongs = 120;
     const userUploads = 34;
     const userFollowing = 50;
     const userEmail = 'johndoe@example.com';
@@ -46,9 +46,8 @@ export default function ProfileScreen() {
                     </View>
                 </View>
                 <View style={styles.stats}>
-                    <Text style={styles.stat}>{userFollowers} followers</Text>
+                    <Text style={styles.stat}>{likedSongs} liked songs</Text>
                     <Text style={styles.stat}>{userUploads} uploads</Text>
-                    <Text style={styles.stat}>{userFollowing} following</Text>
                 </View>
                 <TouchableOpacity 
                     style={styles.editButton} 
@@ -65,7 +64,7 @@ export default function ProfileScreen() {
                 <View style={styles.actions}>
                     <TouchableOpacity 
                         style={styles.actionButton} 
-                        onPress={() => navigation.navigate('Playlist')}
+                        onPress={() => navigation.navigate('AllPlaylists')}
                     >
                         <Text style={styles.actionButtonText}>Play Lists</Text>
                     </TouchableOpacity>
@@ -81,9 +80,7 @@ export default function ProfileScreen() {
                     >
                         <Text style={styles.actionButtonText}>Liked Songs</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionButton}>
-                        <Text style={styles.actionButtonText}>Followed Artists</Text>
-                    </TouchableOpacity>
+                    
                     <TouchableOpacity onPress={handleLogout} style={styles.actionButton}> 
                         <Text style={styles.actionButtonText}>Logout</Text>
                      </TouchableOpacity>
