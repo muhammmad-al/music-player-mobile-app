@@ -128,15 +128,22 @@ const MusicPlayerScreen = () => {
       end={{ x: 0, y: 1 }}
       style={styles.container}
     >
-      <TouchableOpacity style={styles.profileButton} onPress={() => navigation.navigate('Profile')}>
-        <Image
-          source={{ uri: 'https://example.com/profile-pic-url' }} // Replace with actual profile picture URL
-          style={styles.profileImage}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.uploadButton} onPress={() => navigation.navigate('MusicUpload')}>
-        <Text style={styles.uploadText}>Upload Music</Text>
-      </TouchableOpacity>
+      <View style={styles.topContainer}>
+        <TouchableOpacity style={styles.profileButton} onPress={() => navigation.navigate('Profile')}>
+          <Image
+            source={{ uri: 'https://example.com/profile-pic-url' }} // Replace with actual profile picture URL
+            style={styles.profileImage}
+          />
+        </TouchableOpacity>
+        <View style={styles.topButtonsContainer}>
+          <TouchableOpacity style={styles.smallButton} onPress={() => navigation.navigate('MusicUpload')}>
+            <Text style={styles.smallButtonText}>Upload Music</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.smallButton} onPress={() => navigation.navigate('Playlist')}>
+            <Text style={styles.smallButtonText}>Make Playlist</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
       <TextInput
         style={styles.searchBar}
         placeholder="Search by genre, artist, or track name"
@@ -174,10 +181,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',
   },
+  topContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 20,
+    marginLeft: 20,
+  },
   profileButton: {
-    position: 'absolute',
-    top: 20,
-    left: 30,
     width: 80,
     height: 80,
     borderRadius: 40,
@@ -190,21 +200,23 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'cover',
   },
-  uploadButton: {
-    position: 'absolute',
-    top: 25,
-    left: 160,
-    padding: 25,
+  topButtonsContainer: {
+    flexDirection: 'row',
+    marginLeft: 20,
+  },
+  smallButton: {
+    padding: 10,
     backgroundColor: 'white',
     borderRadius: 6,
+    marginLeft: 10,
   },
-  uploadText: {
-    fontSize: 20,
+  smallButtonText: {
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#000',
   },
   searchBar: {
-    marginTop: 120,
+    marginTop: 20,
     height: 50,
     borderColor: 'black',
     borderWidth: 2,
