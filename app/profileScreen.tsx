@@ -72,8 +72,11 @@ export default function ProfileScreen() {
                     <TouchableOpacity style={styles.actionButton}>
                         <Text style={styles.actionButtonText}>Uploaded Tracks</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionButton}>
-                        <Text style={styles.actionButtonText}>Likes</Text>
+                    <TouchableOpacity 
+                        style={styles.actionButton} 
+                        onPress={() => navigation.navigate('LikedSongs')}
+                    >
+                        <Text style={styles.actionButtonText}>Liked Songs</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.actionButton}>
                         <Text style={styles.actionButtonText}>Followed Artists</Text>
