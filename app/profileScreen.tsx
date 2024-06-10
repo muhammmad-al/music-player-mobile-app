@@ -69,7 +69,10 @@ export default function ProfileScreen() {
                     >
                         <Text style={styles.actionButtonText}>Play Lists</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionButton}>
+                    <TouchableOpacity 
+                        style={styles.actionButton} 
+                        onPress={() => navigation.navigate('UploadedTracks')}
+                    >
                         <Text style={styles.actionButtonText}>Uploaded Tracks</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
