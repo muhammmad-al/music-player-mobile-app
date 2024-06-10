@@ -97,7 +97,7 @@ const MusicPlayerScreen = () => {
           client_id: CLIENT_ID,
           format: 'jsonpretty',
           limit: 10,
-          tags: 'hiphop',
+          tags: 'jazz',
         },
       });
       setRecommendedTracks(response.data.results.map((track: any) => ({
@@ -106,7 +106,7 @@ const MusicPlayerScreen = () => {
         audio: track.audio,
         artist_name: track.artist_name,
         album_name: track.album_name,
-        genre: 'hiphop',
+        genre: 'jazz',
         album_cover: track.album_image || '',
       })));
     } catch (error) {
