@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, View, Text, TouchableOpacity, Button, ScrollView} from 'react-native';
-import { useNavigation, NavigationProp, useRoute } from '@react-navigation/native';
+import { Image, StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RootStackParamList } from '@/types/type';
-import {useToken} from './TokenStuff';
+import { useToken } from './TokenStuff';
 
 export default function ProfileScreen() {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     const [profileImage, setProfileImage] = useState('');
-    const {logout} = useToken();
-    
-console.log('ProfileScreen: useToken', {logout})
+    const { logout } = useToken();
 
     const userName = 'John Doe';
     const userPronouns = 'He/Him';
@@ -35,53 +33,56 @@ console.log('ProfileScreen: useToken', {logout})
             end={{ x: 0, y: 1 }}
             style={styles.container}
         >
-        <ScrollView>
-            <View style={styles.header}>
-                <Image
-                    source={{ uri: profileImage || 'https://via.placeholder.com/150' }}
-                    style={styles.profilePicture}
-                />
-                <View style={styles.headerText}>
-                    <Text style={styles.name}>{userName}</Text>
-                    <Text style={styles.pronouns}>{userPronouns}</Text>
-                    <Text style={styles.bio}>{userBio}</Text>
+            <ScrollView>
+                <View style={styles.header}>
+                    <Image
+                        source={{ uri: profileImage || 'https://via.placeholder.com/150' }}
+                        style={styles.profilePicture}
+                    />
+                    <View style={styles.headerText}>
+                        <Text style={styles.name}>{userName}</Text>
+                        <Text style={styles.pronouns}>{userPronouns}</Text>
+                        <Text style={styles.bio}>{userBio}</Text>
+                    </View>
                 </View>
-            </View>
-            <View style={styles.stats}>
-                <Text style={styles.stat}>{userFollowers} followers</Text>
-                <Text style={styles.stat}>{userUploads} uploads</Text>
-                <Text style={styles.stat}>{userFollowing} following</Text>
-            </View>
-            <TouchableOpacity 
-                style={styles.editButton} 
-                onPress={() => navigation.navigate('EditProfile', { profileImage, setProfileImage })}
-            >
-                <Text style={styles.editButtonText}>Edit Profile</Text>
-            </TouchableOpacity>
-            <View style={styles.details}>
-                <Text style={styles.detailText}>Email: {userEmail}</Text>
-                <Text style={styles.detailText}>Phone Number: {userPhoneNumber}</Text>
-                <Text style={styles.detailText}>Location: {userLocation}</Text>
-                <Text style={styles.detailText}>Favorite Genre: {userFavoriteGenre}</Text>
-            </View>
-            <View style={styles.actions}>
-                <TouchableOpacity style={styles.actionButton}>
-                    <Text style={styles.actionButtonText}>Play Lists</Text>
+                <View style={styles.stats}>
+                    <Text style={styles.stat}>{userFollowers} followers</Text>
+                    <Text style={styles.stat}>{userUploads} uploads</Text>
+                    <Text style={styles.stat}>{userFollowing} following</Text>
+                </View>
+                <TouchableOpacity 
+                    style={styles.editButton} 
+                    onPress={() => navigation.navigate('EditProfile', { profileImage, setProfileImage })}
+                >
+                    <Text style={styles.editButtonText}>Edit Profile</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton}>
-                    <Text style={styles.actionButtonText}>Uploaded Tracks</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton}>
-                    <Text style={styles.actionButtonText}>Likes</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton}>
-                    <Text style={styles.actionButtonText}>Followed Artists</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleLogout} style={styles.actionButton}> 
-                    <Text style={styles.actionButton}>Logout</Text>
-                 </TouchableOpacity>
-            </View>
-         </ScrollView>
+                <View style={styles.details}>
+                    <Text style={styles.detailText}>Email: {userEmail}</Text>
+                    <Text style={styles.detailText}>Phone Number: {userPhoneNumber}</Text>
+                    <Text style={styles.detailText}>Location: {userLocation}</Text>
+                    <Text style={styles.detailText}>Favorite Genre: {userFavoriteGenre}</Text>
+                </View>
+                <View style={styles.actions}>
+                    <TouchableOpacity 
+                        style={styles.actionButton} 
+                        onPress={() => navigation.navigate('Playlist')}
+                    >
+                        <Text style={styles.actionButtonText}>Play Lists</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.actionButton}>
+                        <Text style={styles.actionButtonText}>Uploaded Tracks</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.actionButton}>
+                        <Text style={styles.actionButtonText}>Likes</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.actionButton}>
+                        <Text style={styles.actionButtonText}>Followed Artists</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleLogout} style={styles.actionButton}> 
+                        <Text style={styles.actionButtonText}>Logout</Text>
+                     </TouchableOpacity>
+                </View>
+             </ScrollView>
         </LinearGradient>
     );
 }
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FF7F50',
         padding: 10,
         alignItems: 'center',
-        marginBottom: 40, // Increase space between Edit Profile button and details section
+        marginBottom: 40,
     },
     editButtonText: {
         fontSize: 20,

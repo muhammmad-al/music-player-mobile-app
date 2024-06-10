@@ -7,6 +7,7 @@ import LoginScreen from './loginScreen';
 import SignUpScreen from './signupScreen';
 import ProfileScreen from './profileScreen';
 import MusicPlayerScreen from './MusicPlayerScreen';
+import PlaylistScreen from './playlist';
 import DetailedMusicPlayerScreen, {Track} from './DetailedMusicPlayerScreen';
 import EditProfileScreen from './editProfile';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
@@ -50,6 +51,7 @@ export type RootStackParamList = {
   Profile: undefined;
   MusicUpload: undefined;
   MusicPlayer: undefined;
+  Playlist: undefined;
   DetailedMusicPlayerScreen: {track: Track};
   EditProfile: {
     profileImage: string;
@@ -102,6 +104,7 @@ const App: React.FC = () => {
             <Stack.Screen name="MusicUpload" component={MusicUploadScreen} />
             <Stack.Screen name="DetailedMusicPlayerScreen" component={DetailedMusicPlayerScreen} />
             <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+            <Stack.Screen name="Playlist" component={PlaylistScreen} />
           </>
         ) : (
           <>
