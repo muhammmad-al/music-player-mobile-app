@@ -42,6 +42,7 @@ export default function Home() {
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [tracks, setTracks] = useState<Track[]>([]);
+  const [recommendedTracks, setRecommendedTracks] = useState<Track[]>([]);
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -52,6 +53,10 @@ export default function Home() {
   useEffect(() => {
     fetchTracks(selectedGenre, page);
   }, [page, searchTerm, selectedGenre]);
+
+  useEffect(() => {
+    fetchRecommendedTracks();
+  }, []);
 
   const fetchTracks = async (genre: string = '', page: number) => {
     setLoading(true);
@@ -81,6 +86,30 @@ export default function Home() {
       console.error('Error fetching tracks:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchRecommendedTracks = async () => {
+    try {
+      const response = await axios.get(API_URL, {
+        params: {
+          client_id: CLIENT_ID,
+          format: 'jsonpretty',
+          limit: 10,
+          tags: 'jazz',
+        },
+      });
+      setRecommendedTracks(response.data.results.map((track: any) => ({
+        id: track.id,
+        name: track.name,
+        audio: track.audio,
+        artist_name: track.artist_name,
+        album_name: track.album_name,
+        genre: 'jazz',
+        album_cover: track.album_image || '',
+      })));
+    } catch (error) {
+      console.error('Error fetching recommended tracks:', error);
     }
   };
 
@@ -158,8 +187,17 @@ export default function Home() {
       />
       <View style={styles.recommendedWrapper}>
         <Text style={styles.recommendedHeader}>Recommended Tracks</Text>
+        <FlatList
+          data={recommendedTracks}
+          horizontal
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => navigation.navigate('DetailedMusicPlayerScreen', { track: item })}>
+              <Image source={{ uri: item.album_cover }} style={styles.albumCover} />
+            </TouchableOpacity>
+          )}
+        />
       </View>
-      <View style={styles.spaceWrapper} />
       <View style={styles.genreWrapper}>
         <GenreSelector selectedGenre={selectedGenre} onSelectGenre={handleGenreSelect} />
       </View>
@@ -250,8 +288,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center', // Center the text
   },
-  spaceWrapper: {
-    height: 180, // Adds space for visual display of album covers
+  albumCover: {
+    width: 100,
+    height: 100,
+    marginRight: 10,
   },
   genreWrapper: {
     marginTop: 10, // Adds space between recommended header and genre buttons
