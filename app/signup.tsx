@@ -6,15 +6,21 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/type';
 import { router } from 'expo-router';
+import { createUser } from '@/backend';
 
 export default function SignUp() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
-    // const auth = getAuth(app);
+    
+    const signupHandler = async () => {
+        try {
+            await createUser(username, email, password);
+            router.replace('login');
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <LinearGradient
             colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
@@ -45,7 +51,7 @@ export default function SignUp() {
                 />
                 <Button
                     title="Sign Up"
-                    onPress={async () => router.replace('login')}
+                    onPress={async () => await signupHandler()}
                     color="#1E90FF"
                 />
             </View>

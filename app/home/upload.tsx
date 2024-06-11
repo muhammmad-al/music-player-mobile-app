@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
 
 export default function MusicUploadScreen() {
     const [trackName, setTrackName] = useState('');
@@ -58,10 +57,8 @@ export default function MusicUploadScreen() {
             {trackFile && trackFile.type === 'success' && (
                 <Text style={styles.fileName}>{trackFile.name}</Text>
             )}
-            <TouchableOpacity 
-            style={styles.button} 
-            onPress={() => router.replace('home')}>
-            <Text style={styles.buttonText}>UPLOAD</Text>
+            <TouchableOpacity style={styles.button} onPress={handleUpload}>
+                <Text style={styles.buttonText}>UPLOAD</Text>
             </TouchableOpacity>
         </LinearGradient>
     );

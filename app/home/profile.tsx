@@ -1,61 +1,51 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Image, StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RootStackParamList } from '@/types/type';
 import { router } from 'expo-router';
+import { UserProfile } from '@/backend';
+import useUserProfile from '@/hooks/useUserProfile';
+import { UserProfileContext } from '@/contexts/UserProfile';
 
 export default function Profile() {
     const [profileImage, setProfileImage] = useState('');
-
-    const userName = 'John Doe';
-    const userPronouns = 'He/Him';
-    const userBio = 'Music enthusiast';
-    const likedSongs = 120;
-    const userUploads = 34;
-    const userFollowing = 50;
-    const userEmail = 'johndoe@example.com';
-    const userPhoneNumber = '+1234567890';
-    const userLocation = 'New York, USA';
-    const userFavoriteGenre = 'Hip Hop';
+    const userProfile: UserProfile = useContext(UserProfileContext) as UserProfile;
 
     return (
-        <LinearGradient
-            colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={styles.container}
-        >
-            <ScrollView>
+        <ScrollView>
+            <LinearGradient
+                colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 0, y: 1 }}
+                style={styles.container}
+            >
                 <View style={styles.header}>
                     <Image
                         source={{ uri: profileImage || 'https://via.placeholder.com/150' }}
                         style={styles.profilePicture}
                     />
                     <View style={styles.headerText}>
-                        <Text style={styles.name}>{userName}</Text>
-                        <Text style={styles.pronouns}>{userPronouns}</Text>
-                        <Text style={styles.bio}>{userBio}</Text>
+                        <Text style={styles.name}>{userProfile.username}</Text>
+                        <Text style={styles.pronouns}>{userProfile.pronoun}</Text>
+                        <Text style={styles.bio}>{userProfile.bio}</Text>
                     </View>
                 </View>
                 <View style={styles.stats}>
-                    <Text style={styles.stat}>{likedSongs} liked songs</Text>
-                    <Text style={styles.stat}>{userUploads} uploads</Text>
+                    <Text style={styles.stat}>{''} liked songs</Text>
+                    <Text style={styles.stat}>{''} uploads</Text>
                 </View>
                 <TouchableOpacity
-                    style={styles.editButton} 
-                    onPress={
-                        // () => navigation.navigate('EditProfile', { profileImage, setProfileImage })
-                        () => { }
-                    }
+                    style={styles.editButton}
+                    onPress={() => router.push('/home/edit-profile')}
                 >
                     <Text style={styles.editButtonText}>Edit Profile</Text>
                 </TouchableOpacity>
                 <View style={styles.details}>
-                    <Text style={styles.detailText}>Email: {userEmail}</Text>
-                    <Text style={styles.detailText}>Phone Number: {userPhoneNumber}</Text>
-                    <Text style={styles.detailText}>Location: {userLocation}</Text>
-                    <Text style={styles.detailText}>Favorite Genre: {userFavoriteGenre}</Text>
+                    <Text style={styles.detailText}>Email: {userProfile.email}</Text>
+                    <Text style={styles.detailText}>Phone Number: {userProfile.phoneNumber}</Text>
+                    <Text style={styles.detailText}>Location: {userProfile.location}</Text>
+                    <Text style={styles.detailText}>Favorite Genre: {userProfile.favorite}</Text>
                 </View>
                 <View style={styles.actions}>
                     <TouchableOpacity
@@ -78,13 +68,13 @@ export default function Profile() {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        // onPress={handleLogout} 
+                        onPress={() => router.replace('/')}
                         style={styles.actionButton}>
                         <Text style={styles.actionButtonText}>Logout</Text>
                     </TouchableOpacity>
                 </View>
-            </ScrollView>
-        </LinearGradient>
+            </LinearGradient >
+        </ScrollView >
     );
 }
 

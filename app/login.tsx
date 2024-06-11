@@ -4,10 +4,24 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, useRouter } from 'expo-router';
+import { authentication } from '@/backend';
 
 export default function Login() {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
+
+    const loginHandler = async () => {
+        try {
+            const success: boolean = await authentication(email, password);
+            if (success) {
+                router.replace('/home');
+                return;
+            }
+            console.log("Authentication failed");
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <LinearGradient
@@ -33,7 +47,7 @@ export default function Login() {
                 />
                 <Button
                     title="Log In"
-                    onPress={() => router.replace('home')}
+                    onPress={async () => await loginHandler()}
                     color="#1E90FF"
                 />
             </View>
