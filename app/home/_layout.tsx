@@ -14,6 +14,7 @@ export default function HomeLayout() {
                 <Stack.Screen name='upload' options={{ title: 'Upload musics' }} />
                 <Stack.Screen name='create-playlists' options={{ title: 'Create new playlists' }} />
                 <Stack.Screen name='edit-profile' options={{ title: 'Edit your profile' }} />
+                <Stack.Screen name='detailed-music' options={{ title: 'Detailed music' }} />
             </Stack>
         </UserProfileProvider>
     );

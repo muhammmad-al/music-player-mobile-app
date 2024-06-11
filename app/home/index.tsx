@@ -209,9 +209,11 @@ export default function Home() {
           data={tracks}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={
-              // () => navigation.navigate('DetailedMusicPlayerScreen', { track: item })
-              () => { }
+            <TouchableOpacity onPress={() =>
+              router.push({
+                pathname: 'home/detailed-music',
+                params: { item: JSON.stringify(item) }
+              })
             }>
               <Text style={styles.trackItem}>{item.name} - {item.artist_name}</Text>
             </TouchableOpacity>
