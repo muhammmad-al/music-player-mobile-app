@@ -1,59 +1,37 @@
-import { initializeApp } from "firebase/app";
-import { User } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, getFirestore, initializeFirestore, query, setDoc, updateDoc, where } from "firebase/firestore";
+import {
+    addDoc,
+    collection, doc, getDoc, getDocs,
+    query, setDoc, updateDoc, where
+} from "firebase/firestore";
+import { firestore, storage } from './setup'
+import { UserProfile, Track, Playlist } from "./type";
+import { DocumentPickerAsset } from "expo-document-picker";
+import * as FileSystem from 'expo-file-system'
+import * as Crypto from 'expo-crypto';
+import { StringFormat, UploadResult, getBlob, ref, uploadBytes, uploadString } from 'firebase/storage';
 
-const firebaseConfig = {
-    apiKey: "AIzaSyA8hr1oOEwu4w4bMQwRTiQjNNwHJzZktkY",
-    authDomain: "soundrevive-91d60.firebaseapp.com",
-    projectId: "soundrevive-91d60",
-    storageBucket: "soundrevive-91d60.appspot.com",
-    messagingSenderId: "341252652672",
-    appId: "1:341252652672:web:9f3c574e1ca02a59f97065"
+export {
+    UserProfile,
+    Track,
+    Playlist,
 };
-
-export const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-
-export interface UserProfile {
-    username: string;
-    email: string;
-    password: string;
-    pronoun: string | null;
-    bio: string | null;
-    phoneNumber: string | null;
-    location: string | null;
-    favorite: string | null;
-};
-
-export const userProfile: UserProfile = <UserProfile>{};
 
 export async function authentication(email: string, password: string)
-    : Promise<boolean> {
+    : Promise<UserProfile> {
     try {
-        const userDoc = doc(db, `/users/${email}`);
+        const userDoc = doc(firestore, `/users/${email}`);
         const userSnapshot = await getDoc(userDoc);
 
-        // Email not exists
         if (!userSnapshot.exists()) {
-            return false;
+            throw new Error('Authentication failed');
         }
 
-        // Incorrect password
-        const user = userSnapshot.data() as UserProfile;
-        if (user.password !== password) {
-            return false;
+        const userProfile = userSnapshot.data() as UserProfile;
+        if (userProfile.password !== password) {
+            throw new Error('Authentication failed');
         }
 
-        userProfile.username = user.username;
-        userProfile.email = userSnapshot.id;
-        userProfile.password = user.password;
-        userProfile.pronoun = user.pronoun;
-        userProfile.bio = user.bio;
-        userProfile.phoneNumber = user.phoneNumber;
-        userProfile.location = user.location;
-        userProfile.favorite = user.favorite;
-
-        return true;
+        return userProfile;
     } catch (error) {
         throw error;
     }
@@ -62,7 +40,7 @@ export async function authentication(email: string, password: string)
 export async function createUser(username: string, email: string, password: string)
     : Promise<boolean> {
     try {
-        const userDoc = doc(db, `/users/${email}`);
+        const userDoc = doc(firestore, `/users/${email}`);
         const userSnapshot = await getDoc(userDoc);
 
         // TODO: check if a user exists
@@ -91,8 +69,107 @@ export async function createUser(username: string, email: string, password: stri
 export async function updateUserProfile(newProfile: UserProfile)
     : Promise<void> {
     try {
-        const userDoc = doc(db, `/users/${newProfile.email}`);
+        const userDoc = doc(firestore, `/users/${newProfile.email}`);
         await updateDoc(userDoc, { ...newProfile });
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function createPlaylist(
+    userID: string,
+    playlistName: string
+): Promise<void> {
+    try {
+        const playlistDoc = doc(firestore,
+            `/users/${userID}/playlists/${playlistName}`
+        );
+        const playlistSnapshot = await getDoc(playlistDoc);
+
+        if (playlistSnapshot.exists()) {
+            throw new Error(`A playlist with name ${playlistName} already exists`)
+        }
+
+        await setDoc(playlistDoc, {
+            tracks: []
+        });
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function getPlaylists(userID: string): Promise<Playlist[]> {
+    try {
+        const playlistColl = collection(firestore,
+            `/users/${userID}/playlists`
+        );
+        const playlistSnapshots = await getDocs(playlistColl);
+        return playlistSnapshots.docs.map(doc => ({ id: doc.id }));
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function uploadTrackFile(
+    userID: string,
+    trackFile: DocumentPickerAsset,
+    trackName: string,
+    artistName: string,
+): Promise<void> {
+    try {
+        const trackFileContent = await FileSystem.readAsStringAsync(trackFile.uri, {
+            encoding: FileSystem.EncodingType.Base64,
+        });
+        const trackID = await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA256,
+            trackFileContent,
+        );
+
+        const trackDoc = doc(firestore, `/users/${userID}/tracks/${trackID}`);
+        const trackSnapshot = await getDoc(trackDoc);
+
+        if (trackSnapshot.exists()) {
+            throw new Error('Track already exists');
+        }
+
+        const response = await fetch(trackFile.uri);
+        const blob = await response.blob();
+        const trackStorageRef = ref(storage, `/audio/${trackID}`);
+        const uploadResult: UploadResult = await uploadBytes(
+            trackStorageRef,
+            blob,
+        );
+
+        const track = {
+            name: trackName,
+            artist_name: artistName,
+        };
+        await setDoc(trackDoc, track);
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function getTracks(userID: string)
+    : Promise<Track[]> {
+    try {
+        const trackColl = collection(firestore,
+            `/users/${userID}/tracks`
+        );
+        const trackSnapshots = await getDocs(trackColl);
+        return trackSnapshots.docs.map(doc => ({
+            id: doc.id,
+            name: doc.data().name,
+            artist_name: doc.data().artist_name,
+        }));
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function addTrackToPlaylist() {
+    try {
+
     } catch (error) {
         throw error;
     }

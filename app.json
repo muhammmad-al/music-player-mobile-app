@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "MusicApp",
-    "slug": "MusicApp",
+    "name": "SoundRevive",
+    "slug": "SoundRevive",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "sound-revive",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.vinceqcc.SoundRevive"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +32,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "6e7c0ee1-88f6-495f-ac16-937fdf53ee84"
+      }
     }
   }
 }

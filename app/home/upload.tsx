@@ -1,32 +1,50 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { LinearGradient } from 'expo-linear-gradient';
+import { UserProfile, uploadTrackFile } from '@/backend';
+import { UserProfileContext } from '@/contexts/UserProfile';
 
-export default function MusicUploadScreen() {
+export default function MusicUpload() {
+    const userProfile = useContext(UserProfileContext) as UserProfile;
+
     const [trackName, setTrackName] = useState('');
     const [artistName, setArtistName] = useState('');
-    const [trackFile, setTrackFile] = useState<any | null>(null);
+    const [trackFile, setTrackFile] = useState<
+        DocumentPicker.DocumentPickerAsset | null>();
 
     const pickTrack = async () => {
-        let result: any = await DocumentPicker.getDocumentAsync({
-            type: 'audio/*',
-            copyToCacheDirectory: true,
-            multiple: false,
-        });
+        let result: DocumentPicker.DocumentPickerResult =
+            await DocumentPicker.getDocumentAsync({
+                type: 'audio/*',
+                copyToCacheDirectory: true,
+                multiple: false,
+            });
 
-        if (result.type === 'success') {
-            setTrackFile(result);
+        if (result.assets) {
+            setTrackFile(result.assets[0]);
         } else {
             setTrackFile(null); // or handle the case where the user cancels the picker
         }
     };
 
-    const handleUpload = () => {
-        if (trackFile && trackFile.type === 'success') {
-            console.log('Track Name:', trackName);
-            console.log('Artist Name:', artistName);
-            console.log('Track File URI:', trackFile.uri);
+    const handleUpload = async () => {
+        if (!trackFile) {
+            return;
+        }
+        // console.log('Track Name:', trackName);
+        // console.log('Artist Name:', artistName);
+        // console.log('Track File URI:', trackFile.uri);
+
+        try {
+            await uploadTrackFile(
+                userProfile.email,
+                trackFile,
+                trackName,
+                artistName,
+            );
+        } catch (error) {
+            alert(error);
         }
     };
 
@@ -54,10 +72,13 @@ export default function MusicUploadScreen() {
             <TouchableOpacity style={styles.button} onPress={pickTrack}>
                 <Text style={styles.buttonText}>PICK A TRACK</Text>
             </TouchableOpacity>
-            {trackFile && trackFile.type === 'success' && (
+            {trackFile && (
                 <Text style={styles.fileName}>{trackFile.name}</Text>
             )}
-            <TouchableOpacity style={styles.button} onPress={handleUpload}>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={handleUpload}
+            >
                 <Text style={styles.buttonText}>UPLOAD</Text>
             </TouchableOpacity>
         </LinearGradient>

@@ -12,7 +12,7 @@ export default function SignUp() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    
+
     const signupHandler = async () => {
         try {
             await createUser(username, email, password);

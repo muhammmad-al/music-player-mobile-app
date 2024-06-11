@@ -1,11 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { Image, StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { RootStackParamList } from '@/types/type';
 import { router } from 'expo-router';
 import { UserProfile } from '@/backend';
-import useUserProfile from '@/hooks/useUserProfile';
 import { UserProfileContext } from '@/contexts/UserProfile';
 
 export default function Profile() {
@@ -50,13 +47,13 @@ export default function Profile() {
                 <View style={styles.actions}>
                     <TouchableOpacity
                         style={styles.actionButton}
-                    // onPress={() => navigation.navigate('AllPlaylists')}
+                        onPress={() => router.push('/home/playlists')}
                     >
                         <Text style={styles.actionButtonText}>Play Lists</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.actionButton}
-                    // onPress={() => navigation.navigate('UploadedTracks')}
+                        onPress={() => router.push('/home/tracks')}
                     >
                         <Text style={styles.actionButtonText}>Uploaded Tracks</Text>
                     </TouchableOpacity>

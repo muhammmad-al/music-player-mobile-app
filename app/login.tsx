@@ -1,25 +1,24 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     StyleSheet, View, TextInput, Button, Text, TouchableOpacity
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, useRouter } from 'expo-router';
-import { authentication } from '@/backend';
+import { UserProfile, authentication } from '@/backend';
+import { SetUserProfileContext } from '@/contexts/UserProfile';
 
 export default function Login() {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
+    const setUserProfile = useContext(SetUserProfileContext);
 
     const loginHandler = async () => {
         try {
-            const success: boolean = await authentication(email, password);
-            if (success) {
-                router.replace('/home');
-                return;
-            }
-            console.log("Authentication failed");
+            const userProfile: UserProfile = await authentication(email, password);
+            setUserProfile(userProfile);
+            router.replace('/home');
         } catch (error) {
-            console.log(error);
+            alert(error);
         }
     };
 
