@@ -192,7 +192,10 @@ export default function Home() {
           horizontal
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => navigation.navigate('DetailedMusicPlayerScreen', { track: item })}>
+            <TouchableOpacity onPress={() => router.push({
+              pathname: 'home/detailed-music',
+              params: { item: JSON.stringify(item) }
+            })}>
               <Image source={{ uri: item.album_cover }} style={styles.albumCover} />
             </TouchableOpacity>
           )}
