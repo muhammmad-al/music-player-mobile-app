@@ -120,24 +120,6 @@ export default function Home() {
     setSelectedGenre(genre);
   };
 
-  const playSound = async (track: Track) => {
-    if (sound) {
-      await sound.unloadAsync();
-    }
-    const { sound: newSound } = await Audio.Sound.createAsync({ uri: track.audio });
-    setSound(newSound);
-    await newSound.playAsync();
-    setIsPlaying(true);
-    setCurrentTrack(track);
-  };
-
-  const stopSound = async () => {
-    if (sound) {
-      await sound.stopAsync();
-      setIsPlaying(false);
-    }
-  };
-
   const loadMoreTracks = () => {
     if (!loading) {
       setPage((prevPage) => prevPage + 1);
