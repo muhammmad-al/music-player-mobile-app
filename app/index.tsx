@@ -103,9 +103,9 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
   buttonContainer: {
-    width: '70%',
+    width: '90%',
     justifyContent: 'space-around',
-    height: 200,
+    height: 300,
   },
   button: {
     marginVertical: 15,

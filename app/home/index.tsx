@@ -8,6 +8,7 @@ import { Text, Appbar, Button, TextInput, Avatar, List } from 'react-native-pape
 
 const API_URL = 'https://api.jamendo.com/v3.0/tracks';
 const CLIENT_ID = '6b05ee0e';
+const FALLBACK_IMAGE_URL = 'https://path.to/your/fallback/image.png';
 
 type Track = {
   id: string;
@@ -80,7 +81,7 @@ export default function Home() {
           artist_name: track.artist_name,
           album_name: track.album_name,
           genre: genre,
-          album_cover: track.album_image || '',
+          album_cover: track.album_image || FALLBACK_IMAGE_URL,
         })),
       ]);
     } catch (error) {
@@ -107,7 +108,7 @@ export default function Home() {
         artist_name: track.artist_name,
         album_name: track.album_name,
         genre: 'jazz',
-        album_cover: track.album_image || '',
+        album_cover: track.album_image || FALLBACK_IMAGE_URL,
       })));
     } catch (error) {
       console.error('Error fetching recommended tracks:', error);
@@ -118,6 +119,24 @@ export default function Home() {
     setTracks([]);
     setPage(1);
     setSelectedGenre(genre);
+  };
+
+  const playSound = async (track: Track) => {
+    if (sound) {
+      await sound.unloadAsync();
+    }
+    const { sound: newSound } = await Audio.Sound.createAsync({ uri: track.audio });
+    setSound(newSound);
+    await newSound.playAsync();
+    setIsPlaying(true);
+    setCurrentTrack(track);
+  };
+
+  const stopSound = async () => {
+    if (sound) {
+      await sound.stopAsync();
+      setIsPlaying(false);
+    }
   };
 
   const loadMoreTracks = () => {
