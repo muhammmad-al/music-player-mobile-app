@@ -1,13 +1,12 @@
 import { UserProfile } from "@/backend";
 import { UserProfileProvider } from "@/contexts/UserProfile";
 import useUserProfile from "@/hooks/useUserProfile";
-import { Stack, Tabs } from "expo-router";
+import { Stack } from "expo-router";
 import { useState } from "react";
-
 
 export default function HomeLayout() {
     return (
-        <Stack>
+        <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name='index' options={{
                 // TODO: remove back button
                 headerBackButtonMenuEnabled: false,

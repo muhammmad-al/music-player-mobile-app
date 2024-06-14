@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, TextInput, Image, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Audio } from 'expo-av';
 import axios from 'axios';
 import { router } from 'expo-router';
-import { UserProfile } from '@/backend';
-import useUserProfile from '@/hooks/useUserProfile';
+import { Text, Appbar, Button, TextInput, Avatar, List } from 'react-native-paper';
 
 const API_URL = 'https://api.jamendo.com/v3.0/tracks';
 const CLIENT_ID = '6b05ee0e';
@@ -25,14 +24,16 @@ const genres = ['rock', 'pop', 'hiphop', 'jazz', 'electronic', 'classical'];
 const GenreSelector = ({ selectedGenre, onSelectGenre }: { selectedGenre: string; onSelectGenre: (genre: string) => void }) => {
   return (
     <ScrollView horizontal={true} style={styles.genreContainer} contentContainerStyle={styles.genreContentContainer} showsHorizontalScrollIndicator={false}>
-      {genres.map((genre) => (
-        <TouchableOpacity
-          key={genre}
-          style={[styles.genreButton, selectedGenre === genre && styles.selectedGenreButton]}
+      {genres.map((genre, index) => (
+        <Button
+          key={index} // Using index as key for genres since it won't change
+          mode={selectedGenre === genre ? 'contained' : 'outlined'}
           onPress={() => onSelectGenre(genre)}
+          style={styles.genreButton}
+          labelStyle={styles.genreButtonLabel}
         >
-          <Text style={[styles.genreText, selectedGenre === genre && styles.selectedGenreText]}>{genre}</Text>
-        </TouchableOpacity>
+          {genre}
+        </Button>
       ))}
     </ScrollView>
   );
@@ -72,8 +73,8 @@ export default function Home() {
       });
       setTracks((prevTracks) => [
         ...prevTracks,
-        ...response.data.results.map((track: any) => ({
-          id: `${track.id}-${page}`,
+        ...response.data.results.map((track: any, index: number) => ({
+          id: `${track.id}-${page}-${index}`, // Ensuring unique keys
           name: track.name,
           audio: track.audio,
           artist_name: track.artist_name,
@@ -151,39 +152,23 @@ export default function Home() {
 
   return (
     <LinearGradient
-      colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
+      colors={['#000000', '#000000']}
       start={{ x: 0, y: 0 }}
       end={{ x: 0, y: 1 }}
       style={styles.container}
     >
-      <View style={styles.topContainer}>
-        <TouchableOpacity style={styles.profileButton} onPress={
-          () => router.push('/home/profile')
-        }>
-          <Image
-            source={{ uri: 'https://example.com/profile-pic-url' }} // Replace with actual profile picture URL
-            style={styles.profileImage}
-          />
-        </TouchableOpacity>
-        <View style={styles.topButtonsContainer}>
-          <TouchableOpacity style={styles.smallButton} onPress={
-            () => router.push('/home/upload')
-          }>
-            <Text style={styles.smallButtonText}>Upload Music</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.smallButton} onPress={
-            () => router.push('/home/create-playlists')
-          }>
-            <Text style={styles.smallButtonText}>Make Playlist</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Appbar.Header style={styles.header}>
+        <Appbar.Content title="SoundRevive" titleStyle={styles.headerTitle} />
+        <Appbar.Action icon="account" onPress={() => router.push('/home/profile')} />
+      </Appbar.Header>
       <TextInput
-        style={styles.searchBar}
-        placeholder="Search by genre, artist, or track name"
+        mode="outlined"
+        label="Search by genre, artist, or track name"
         value={searchQuery}
         onChangeText={setSearchQuery}
         onSubmitEditing={handleSearch}
+        style={styles.searchBar}
+        theme={{ colors: { text: '#ffffff', primary: '#3498DB', background: '#1a1a1a', placeholder: '#ffffff' }}}
       />
       <View style={styles.recommendedWrapper}>
         <Text style={styles.recommendedHeader}>Recommended Tracks</Text>
@@ -202,6 +187,7 @@ export default function Home() {
         />
       </View>
       <View style={styles.genreWrapper}>
+        <Text style={styles.recommendedHeader}>Jump Right In</Text>
         <GenreSelector selectedGenre={selectedGenre} onSelectGenre={handleGenreSelect} />
       </View>
       <View style={styles.trackListWrapper}>
@@ -215,12 +201,19 @@ export default function Home() {
                 params: { item: JSON.stringify(item) }
               })
             }>
-              <Text style={styles.trackItem}>{item.name} - {item.artist_name}</Text>
+              <List.Item
+                title={item.name}
+                description={item.artist_name}
+                titleStyle={styles.trackTitle}
+                descriptionStyle={styles.trackDescription}
+                left={() => <Avatar.Image size={48} source={{ uri: item.album_cover }} />}
+                style={styles.listItem}
+              />
             </TouchableOpacity>
           )}
           onEndReached={loadMoreTracks}
           onEndReachedThreshold={0.5}
-          ListFooterComponent={loading ? <ActivityIndicator size="large" /> : null}
+          ListFooterComponent={loading ? <ActivityIndicator size="large" animating={true} color="#3498DB" /> : null}
         />
       </View>
     </LinearGradient>
@@ -230,68 +223,29 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: 'black',
   },
-  topContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 20,
-    marginLeft: 20,
+  header: {
+    backgroundColor: 'black',
   },
-  profileButton: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'black',
-  },
-  profileImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  topButtonsContainer: {
-    flexDirection: 'row',
-    marginLeft: 20,
-  },
-  smallButton: {
-    padding: 10,
-    backgroundColor: 'white',
-    borderRadius: 6,
-    marginLeft: 10,
-  },
-  smallButtonText: {
-    fontSize: 16,
+  headerTitle: {
+    color: '#ffffff',
     fontWeight: 'bold',
-    color: '#000',
   },
   searchBar: {
-    marginTop: 20,
-    height: 50,
-    borderColor: 'black',
-    borderWidth: 2,
-    paddingLeft: 10,
-    marginBottom: 10,
-    width: '95%',
-    backgroundColor: 'white',
-    alignSelf: 'center',
-  },
-  trackItem: {
-    fontSize: 16,
-    color: 'black',
-    marginVertical: 5,
+    marginHorizontal: 20,
+    marginVertical: 10,
   },
   recommendedWrapper: {
-    marginTop: 10, // Adjusted to move right below the search bar
+    marginTop: 5,
     paddingHorizontal: 10,
   },
   recommendedHeader: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#fff',
+    color: '#3498DB',
     marginBottom: 10,
-    textAlign: 'center', // Center the text
+    textAlign: 'center',
   },
   albumCover: {
     width: 100,
@@ -299,39 +253,46 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   genreWrapper: {
-    marginTop: 10, // Adds space between recommended header and genre buttons
+    marginTop: 10,
   },
   genreContainer: {
-    paddingHorizontal: 0, // Remove padding from the container to manage it individually
+    paddingHorizontal: 0,
   },
   genreContentContainer: {
-    paddingHorizontal: 20, // Apply consistent padding on the content container
+    paddingHorizontal: 20,
     alignItems: 'center',
   },
   genreButton: {
-    backgroundColor: '#FF7F50',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
     marginHorizontal: 5,
-    borderRadius: 5,
-    justifyContent: 'center',
+    borderColor: '#3498DB',
+    borderWidth: 1,
+  },
+  genreButtonLabel: {
+    color: '#ffffff',
   },
   selectedGenreButton: {
-    backgroundColor: '#FF4500', // Different color for selected genre
+    marginHorizontal: 5,
+    backgroundColor: '#3498DB',
   },
-  selectedGenreText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  genreText: {
-    color: 'white',
-    fontSize: 16,
-    textAlign: 'center',
+  selectedGenreButtonLabel: {
+    color: '#ffffff',
   },
   trackListWrapper: {
     marginTop: 20,
     flex: 1,
     width: '100%',
     paddingHorizontal: 10,
+  },
+  listItem: {
+    backgroundColor: '#1a1a1a',
+    marginBottom: 5,
+    borderRadius: 5,
+  },
+  trackTitle: {
+    color: '#ffffff', // Track title color
+    fontWeight: 'bold', // Bold font for the track title
+  },
+  trackDescription: {
+    color: '#3498DB', // Artist/description color to match the primary color
   },
 });

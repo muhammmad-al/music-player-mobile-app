@@ -1,9 +1,8 @@
 import React, { useContext, useState } from 'react';
-import {
-    StyleSheet, View, TextInput, Button, Text, TouchableOpacity
-} from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router, useRouter } from 'expo-router';
+import { router } from 'expo-router';
+import { TextInput, Button } from 'react-native-paper';
 import { UserProfile, authentication } from '@/backend';
 import { SetUserProfileContext } from '@/contexts/UserProfile';
 
@@ -24,7 +23,7 @@ export default function Login() {
 
     return (
         <LinearGradient
-            colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
+            colors={['#000000', '#000000']}
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 1 }}
             style={styles.container}
@@ -45,17 +44,17 @@ export default function Login() {
                     secureTextEntry
                 />
                 <Button
-                    title="Log In"
-                    onPress={async () => await loginHandler()}
-                    color="#1E90FF"
-                />
-            </View>
-            <Text style={styles.newUserText}>
-                New user?
-                <Text
-                    style={styles.signUpLink}
-                    onPress={() => router.replace('signup')}
+                    mode="contained"
+                    onPress={loginHandler}
+                    style={styles.button}
+                    labelStyle={{ color: '#FFFFFF' }}
                 >
+                    Log In
+                </Button>
+            </View>
+            <Text style={styles.accountText}>
+                New user?{' '}
+                <Text style={styles.signUpLink} onPress={() => router.replace('signup')}>
                     Sign up here
                 </Text>
             </Text>
@@ -74,13 +73,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)', // Slightly transparent to match style
         borderRadius: 10,
     },
     title: {
-        fontSize: 24,
+        fontSize: 32,
         marginBottom: 20,
-        color: 'black',
+        color: '#FFFFFF',
+        fontWeight: 'bold',
+        fontFamily: 'Roboto-Bold',
     },
     input: {
         width: '100%',
@@ -91,13 +92,18 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         backgroundColor: 'white',
     },
-    newUserText: {
+    accountText: {
         marginTop: 20,
         fontSize: 16,
-        color: 'black',
+        color: 'white', // Ensure text color is white for better visibility
     },
     signUpLink: {
-        color: 'white',
+        color: '#3498DB',
         fontWeight: 'bold',
+    },
+    button: {
+        width: '100%',
+        marginTop: 20,
+        backgroundColor: '#3498DB',
     },
 });

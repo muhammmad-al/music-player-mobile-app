@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import {
-    StyleSheet, View, TextInput, Button, Text, TouchableOpacity
+    StyleSheet, View, Text, TouchableOpacity
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '../types/type';
 import { router } from 'expo-router';
+import { TextInput, Button } from 'react-native-paper';
 import { createUser } from '@/backend';
 
 export default function SignUp() {
@@ -20,10 +19,11 @@ export default function SignUp() {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
+
     return (
         <LinearGradient
-            colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
+            colors={['#000000', '#000000']}
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 1 }}
             style={styles.container}
@@ -50,15 +50,17 @@ export default function SignUp() {
                     secureTextEntry
                 />
                 <Button
-                    title="Sign Up"
-                    onPress={async () => await signupHandler()}
-                    color="#1E90FF"
-                />
+                    mode="contained"
+                    onPress={signupHandler}
+                    style={styles.button}
+                    labelStyle={{ color: '#FFFFFF' }}
+                >
+                    Sign Up
+                </Button>
             </View>
             <Text style={styles.accountText}>
-                Already have an account?
-                <Text style={styles.logInLink}
-                    onPress={() => router.replace('login')}>
+                Already have an account?{' '}
+                <Text style={styles.logInLink} onPress={() => router.replace('login')}>
                     Log in here
                 </Text>
             </Text>
@@ -77,13 +79,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)', // Slightly transparent to match style
         borderRadius: 10,
     },
     title: {
-        fontSize: 24,
+        fontSize: 32,
         marginBottom: 20,
-        color: 'black',
+        color: '#FFFFFF',
+        fontWeight: 'bold',
+        fontFamily: 'Roboto-Bold',
     },
     input: {
         width: '100%',
@@ -97,10 +101,15 @@ const styles = StyleSheet.create({
     accountText: {
         marginTop: 20,
         fontSize: 16,
-        color: 'black',
+        color: 'white', // Ensure text color is white for better visibility
     },
     logInLink: {
-        color: 'white',
+        color: '#3498DB',
         fontWeight: 'bold',
+    },
+    button: {
+        width: '100%',
+        marginTop: 20,
+        backgroundColor: '#3498DB',
     },
 });

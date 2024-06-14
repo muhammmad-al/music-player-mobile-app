@@ -10,7 +10,7 @@ export default function Profile() {
     const userProfile: UserProfile = useContext(UserProfileContext) as UserProfile;
 
     return (
-        <ScrollView>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
             <LinearGradient
                 colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
                 start={{ x: 0, y: 0 }}
@@ -24,9 +24,15 @@ export default function Profile() {
                     />
                     <View style={styles.headerText}>
                         <Text style={styles.name}>{userProfile.username}</Text>
-                        <Text style={styles.pronouns}>{userProfile.pronoun}</Text>
-                        <Text style={styles.bio}>{userProfile.bio}</Text>
+                        <Text style={styles.subText}>{userProfile.pronoun}</Text>
+                        <Text style={styles.subText}>{userProfile.bio}</Text>
                     </View>
+                </View>
+                <View style={styles.details}>
+                    <Text style={styles.detailText}>Email: {userProfile.email}</Text>
+                    <Text style={styles.detailText}>Phone: {userProfile.phoneNumber}</Text>
+                    <Text style={styles.detailText}>Location: {userProfile.location}</Text>
+                    <Text style={styles.detailText}>Favorite Genre: {userProfile.favorite}</Text>
                 </View>
                 <View style={styles.stats}>
                     <Text style={styles.stat}>{''} liked songs</Text>
@@ -38,12 +44,6 @@ export default function Profile() {
                 >
                     <Text style={styles.editButtonText}>Edit Profile</Text>
                 </TouchableOpacity>
-                <View style={styles.details}>
-                    <Text style={styles.detailText}>Email: {userProfile.email}</Text>
-                    <Text style={styles.detailText}>Phone Number: {userProfile.phoneNumber}</Text>
-                    <Text style={styles.detailText}>Location: {userProfile.location}</Text>
-                    <Text style={styles.detailText}>Favorite Genre: {userProfile.favorite}</Text>
-                </View>
                 <View style={styles.actions}>
                     <TouchableOpacity
                         style={styles.actionButton}
@@ -59,31 +59,35 @@ export default function Profile() {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.actionButton}
-                    // onPress={() => navigation.navigate('LikedSongs')}
+                        // onPress={() => navigation.navigate('LikedSongs')}
                     >
                         <Text style={styles.actionButtonText}>Liked Songs</Text>
                     </TouchableOpacity>
-
                     <TouchableOpacity
                         onPress={() => router.replace('/')}
-                        style={styles.actionButton}>
+                        style={styles.actionButton}
+                    >
                         <Text style={styles.actionButtonText}>Logout</Text>
                     </TouchableOpacity>
                 </View>
-            </LinearGradient >
-        </ScrollView >
+            </LinearGradient>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1,
+    },
     container: {
         flex: 1,
-        padding: 20,
+        paddingVertical: 20,
+        paddingHorizontal: 20,
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 30,
+        marginBottom: 20,
     },
     profilePicture: {
         width: 100,
@@ -92,61 +96,69 @@ const styles = StyleSheet.create({
         backgroundColor: '#ccc',
     },
     headerText: {
-        marginLeft: 30,
+        marginLeft: 20,
     },
     name: {
         fontSize: 25,
         fontWeight: 'bold',
+        color: '#FFF',
+        marginBottom: 5,
     },
-    pronouns: {
-        fontSize: 18,
-    },
-    bio: {
+    subText: {
         fontSize: 16,
+        color: '#FFF',
+        marginBottom: 5,
+    },
+    details: {
+        marginBottom: 20,
+    },
+    detailText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#FFF',
+        marginBottom: 10,
     },
     stats: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        marginBottom: 30,
+        marginBottom: 20,
     },
     stat: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
+        color: '#FFF',
     },
     editButton: {
-        backgroundColor: '#FF7F50',
-        padding: 10,
+        backgroundColor: '#5EB5F6',
+        padding: 12,
         alignItems: 'center',
-        marginBottom: 40,
+        marginBottom: 20,
+        borderRadius: 25,
     },
     editButtonText: {
-        fontSize: 20,
+        fontSize: 18,
         color: 'white',
         fontWeight: 'bold',
     },
-    details: {
-        marginBottom: 30,
-    },
-    detailText: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        marginBottom: 30,
-    },
     actions: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        marginTop: 20, // Add margin top for separation from other sections
     },
     actionButton: {
-        backgroundColor: '#FF7F50',
-        padding: 10,
-        marginBottom: 50,
+        backgroundColor: '#5EB5F6',
+        paddingVertical: 15, // Decrease padding to reduce button size
+        paddingHorizontal: 20,
+        marginBottom: 20, // Increase this value for more space between buttons
         alignItems: 'center',
         width: '48%',
+        borderRadius: 25,
     },
     actionButtonText: {
-        fontSize: 17,
+        fontSize: 16,
         color: 'white',
         fontWeight: 'bold',
     },
 });
+
