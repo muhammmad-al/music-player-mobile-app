@@ -1,24 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Image, ScrollView, Button, TouchableOpacityBase } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Image, ScrollView, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '@/types/type';
-import useUserProfile from '@/hooks/useUserProfile';
-import { SetUserProfileContext, UserProfileContext } from '@/contexts/UserProfile';
 import { UserProfile, updateUserProfile } from '@/backend';
+import { UserProfileContext, SetUserProfileContext } from '@/contexts/UserProfile';
 import { router } from 'expo-router';
 
 export default function EditProfileScreen() {
     const userProfile = useContext(UserProfileContext) as UserProfile;
     const setUserProfile = useContext(SetUserProfileContext);
-    // const [profileImage, setLocalProfileImage] = useState(initialProfileImage);
     const [name, setName] = useState<string>(userProfile.username);
     const [pronoun, setPronoun] = useState<string>(userProfile.pronoun || '');
     const [bio, setBio] = useState<string>(userProfile.bio || '');
     const [location, setLocation] = useState<string>(userProfile.location || '');
     const [phoneNumber, setPhoneNumber] = useState<string>(userProfile.phoneNumber || '');
     const [favorite, setFavorite] = useState<string>(userProfile.favorite || '');
+    const screenHeight = Dimensions.get('window').height;
 
     const saveHandler = async () => {
         const newProfile: UserProfile = {
@@ -53,9 +50,9 @@ export default function EditProfileScreen() {
     };
 
     return (
-        <ScrollView>
+        <ScrollView contentContainerStyle={[styles.scrollContainer, { minHeight: screenHeight }]}>
             <LinearGradient
-                colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
+                colors={['#000000', '#000000']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
                 style={styles.container}
@@ -64,10 +61,10 @@ export default function EditProfileScreen() {
                     <TouchableOpacity onPress={pickImage}>
                         <View style={styles.profilePicture}>
                             {/* {profileImage ? (
-                            <Image source={{ uri: profileImage }} style={styles.profileImage} />
-                        ) : (
-                            <Text style={styles.uploadText}>Please upload your profile picture here</Text>
-                        )} */}
+                                <Image source={{ uri: profileImage }} style={styles.profileImage} />
+                            ) : (
+                                <Text style={styles.uploadText}>Please upload your profile picture here</Text>
+                            )} */}
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -133,7 +130,6 @@ export default function EditProfileScreen() {
                         >
                             <Text style={styles.saveButtonText}>Save</Text>
                         </TouchableOpacity>
-
                     </View>
                 </View>
             </LinearGradient>
@@ -142,38 +138,42 @@ export default function EditProfileScreen() {
 }
 
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1,
+        justifyContent: 'space-between',
+    },
     container: {
         flex: 1,
         padding: 20,
     },
     saveButtonWrapper: {
-        flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 20,
+        marginBottom: 30,
     },
     saveButton: {
-        backgroundColor: '#FF7F50',
+        backgroundColor: '#3498DB',
         height: 50,
-        width: 80,
-        flex: 1,
+        width: 100,
         justifyContent: 'center',
         borderRadius: 10,
         alignItems: 'center',
     },
     saveButtonText: {
-        fontSize: 20,
-        color: 'white',
+        fontSize: 18,
+        color: '#FFFFFF',
         fontWeight: 'bold',
     },
     profilePictureContainer: {
         alignItems: 'center',
         marginBottom: 30,
+        marginTop: 50,
     },
     profilePicture: {
         width: 120,
         height: 120,
         borderRadius: 60,
-        backgroundColor: 'white',
+        backgroundColor: '#FFFFFF',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     },
     uploadText: {
         textAlign: 'center',
-        color: '#000',
+        color: '#000000',
     },
     form: {
         width: '100%',
@@ -193,15 +193,15 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 5,
-        color: '#000',
+        color: '#FFFFFF',
     },
     input: {
         height: 40,
-        borderColor: 'white',
+        borderColor: '#FFFFFF',
         borderWidth: 1,
         marginBottom: 15,
         paddingHorizontal: 10,
-        backgroundColor: 'white',
-        color: '#000',
+        backgroundColor: '#000000',
+        color: '#FFFFFF',
     },
 });

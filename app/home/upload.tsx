@@ -10,16 +10,14 @@ export default function MusicUpload() {
 
     const [trackName, setTrackName] = useState('');
     const [artistName, setArtistName] = useState('');
-    const [trackFile, setTrackFile] = useState<
-        DocumentPicker.DocumentPickerAsset | null>();
+    const [trackFile, setTrackFile] = useState<DocumentPicker.DocumentPickerAsset | null>(null);
 
     const pickTrack = async () => {
-        let result: DocumentPicker.DocumentPickerResult =
-            await DocumentPicker.getDocumentAsync({
-                type: 'audio/*',
-                copyToCacheDirectory: true,
-                multiple: false,
-            });
+        let result: DocumentPicker.DocumentPickerResult = await DocumentPicker.getDocumentAsync({
+            type: 'audio/*',
+            copyToCacheDirectory: true,
+            multiple: false,
+        });
 
         if (result.assets) {
             setTrackFile(result.assets[0]);
@@ -32,9 +30,6 @@ export default function MusicUpload() {
         if (!trackFile) {
             return;
         }
-        // console.log('Track Name:', trackName);
-        // console.log('Artist Name:', artistName);
-        // console.log('Track File URI:', trackFile.uri);
 
         try {
             await uploadTrackFile(
@@ -50,7 +45,7 @@ export default function MusicUpload() {
 
     return (
         <LinearGradient
-            colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
+            colors={['#000000', '#000000']}
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 1 }}
             style={styles.container}
@@ -60,12 +55,14 @@ export default function MusicUpload() {
             <TextInput
                 style={styles.input}
                 placeholder="Track Name"
+                placeholderTextColor="#888"
                 value={trackName}
                 onChangeText={setTrackName}
             />
             <TextInput
                 style={styles.input}
                 placeholder="Artist Name"
+                placeholderTextColor="#888"
                 value={artistName}
                 onChangeText={setArtistName}
             />
@@ -90,6 +87,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        padding: 20,
     },
     logo: {
         width: 100,
@@ -99,32 +97,34 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         marginBottom: 20,
-        color: 'black',
+        color: '#FFFFFF',
     },
     input: {
         width: '80%',
         height: 40,
-        borderColor: 'black',
+        borderColor: '#3498DB',
         borderWidth: 1,
         marginBottom: 20,
         paddingLeft: 10,
-        backgroundColor: 'white',
+        backgroundColor: '#333333',
+        color: '#FFFFFF',
     },
     button: {
         width: '80%',
         height: 40,
-        backgroundColor: '#FF7F50',
+        backgroundColor: '#3498DB',
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 20,
+        borderRadius: 10,
     },
     buttonText: {
-        color: 'black',
+        color: '#FFFFFF',
         fontSize: 16,
     },
     fileName: {
         marginTop: 10,
         fontSize: 16,
-        color: 'black',
+        color: '#FFFFFF',
     },
 });

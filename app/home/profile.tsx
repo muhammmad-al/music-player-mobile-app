@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Image, StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { Image, StyleSheet, View, Text, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { UserProfile } from '@/backend';
@@ -8,11 +8,12 @@ import { UserProfileContext } from '@/contexts/UserProfile';
 export default function Profile() {
     const [profileImage, setProfileImage] = useState('');
     const userProfile: UserProfile = useContext(UserProfileContext) as UserProfile;
+    const screenHeight = Dimensions.get('window').height;
 
     return (
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <ScrollView contentContainerStyle={[styles.scrollContainer, { minHeight: screenHeight }]}>
             <LinearGradient
-                colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
+                colors={['#000000', '#000000']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
                 style={styles.container}
@@ -35,8 +36,8 @@ export default function Profile() {
                     <Text style={styles.detailText}>Favorite Genre: {userProfile.favorite}</Text>
                 </View>
                 <View style={styles.stats}>
-                    <Text style={styles.stat}>{''} liked songs</Text>
-                    <Text style={styles.stat}>{''} uploads</Text>
+                    <Text style={styles.stat}>Liked songs</Text>
+                    <Text style={styles.stat}>Uploads</Text>
                 </View>
                 <TouchableOpacity
                     style={styles.editButton}
@@ -59,7 +60,6 @@ export default function Profile() {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.actionButton}
-                        // onPress={() => navigation.navigate('LikedSongs')}
                     >
                         <Text style={styles.actionButtonText}>Liked Songs</Text>
                     </TouchableOpacity>
@@ -78,10 +78,11 @@ export default function Profile() {
 const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
+        justifyContent: 'space-between',
     },
     container: {
         flex: 1,
-        paddingVertical: 20,
+        paddingVertical: 40, // Increased vertical padding to move everything down
         paddingHorizontal: 20,
     },
     header: {
@@ -96,18 +97,21 @@ const styles = StyleSheet.create({
         backgroundColor: '#ccc',
     },
     headerText: {
+        flex: 1,
         marginLeft: 20,
     },
     name: {
         fontSize: 25,
         fontWeight: 'bold',
-        color: '#FFF',
+        color: '#FFFFFF',
         marginBottom: 5,
+        marginTop: 30,
     },
     subText: {
         fontSize: 16,
-        color: '#FFF',
-        marginBottom: 5,
+        color: '#FFFFFF',
+        marginBottom: 10,
+        marginTop: 10,
     },
     details: {
         marginBottom: 20,
@@ -115,8 +119,9 @@ const styles = StyleSheet.create({
     detailText: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#FFF',
+        color: '#FFFFFF',
         marginBottom: 10,
+        marginTop: 10,
     },
     stats: {
         flexDirection: 'row',
@@ -126,39 +131,41 @@ const styles = StyleSheet.create({
     stat: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#FFF',
+        color: '#FFFFFF',
     },
     editButton: {
-        backgroundColor: '#5EB5F6',
+        backgroundColor: '#3498DB', // Updated button color
         padding: 12,
         alignItems: 'center',
         marginBottom: 20,
         borderRadius: 25,
+        marginTop: 10,
     },
     editButtonText: {
         fontSize: 18,
-        color: 'white',
+        color: '#FFFFFF',
         fontWeight: 'bold',
     },
     actions: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
-        marginTop: 20, // Add margin top for separation from other sections
+        marginTop: 30,
+        marginBottom: 20,
     },
     actionButton: {
-        backgroundColor: '#5EB5F6',
-        paddingVertical: 15, // Decrease padding to reduce button size
+        backgroundColor: '#3498DB', // Updated button color
+        paddingVertical: 15,
         paddingHorizontal: 20,
-        marginBottom: 20, // Increase this value for more space between buttons
+        marginBottom: 20,
         alignItems: 'center',
         width: '48%',
         borderRadius: 25,
+        marginTop: 30,
     },
     actionButtonText: {
         fontSize: 16,
-        color: 'white',
+        color: '#FFFFFF',
         fontWeight: 'bold',
     },
 });
-

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Playlist, UserProfile, getPlaylists } from '@/backend';
 import { UserProfileContext } from '@/contexts/UserProfile';
@@ -16,7 +16,7 @@ export default function Playlists() {
 
     return (
         <LinearGradient
-            colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
+            colors={['#000000', '#000000']}
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 1 }}
             style={styles.container}
@@ -25,16 +25,20 @@ export default function Playlists() {
                 <View style={styles.header}>
                     <Image source={require('@/assets/images/main_page_pic.png')} style={styles.image} />
                 </View>
-                {playlists.map((playlist, index) => {
-                    return (
-                        <TouchableOpacity
-                            key={index}
-                            style={styles.item}
-                        >
-                            <Text style={styles.playlistTitle}>{playlist.id}</Text>
-                        </TouchableOpacity>
-                    );
-                })}
+                {playlists.length === 0 ? (
+                    <Text style={styles.emptyText}>No Playlists Available</Text>
+                ) : (
+                    playlists.map((playlist, index) => {
+                        return (
+                            <TouchableOpacity
+                                key={index}
+                                style={styles.item}
+                            >
+                                <Text style={styles.playlistTitle}>{playlist.id}</Text>
+                            </TouchableOpacity>
+                        );
+                    })
+                )}
             </ScrollView>
         </LinearGradient>
     );
@@ -53,27 +57,31 @@ const styles = StyleSheet.create({
         width: 100,
         height: 120,
         marginBottom: 10,
+        marginTop: 50,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
+        color: '#FFFFFF',
     },
     emptyText: {
         fontSize: 16,
         textAlign: 'center',
         marginTop: 50,
-        color: '#333',
+        color: '#FFFFFF',
     },
     item: {
         padding: 10,
         borderWidth: 1,
-        borderColor: '#fff',
+        borderColor: '#3498DB',
         marginBottom: 10,
         borderRadius: 10,
+        backgroundColor: '#333333',
     },
     playlistTitle: {
         fontSize: 16,
         fontWeight: 'bold',
+        color: '#FFFFFF',
     },
 });

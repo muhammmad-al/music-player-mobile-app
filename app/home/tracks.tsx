@@ -22,7 +22,7 @@ export default function Tracks() {
 
     return (
         <LinearGradient
-            colors={['#B0E0FE', '#5EB5F6', '#2A88E0']}
+            colors={['#000000', '#000000']}
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 1 }}
             style={styles.container}
@@ -58,29 +58,32 @@ const styles = StyleSheet.create({
         width: 100,
         height: 120,
         marginBottom: 10,
+        marginTop: 50,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
+        color: '#FFFFFF',
     },
     emptyText: {
         fontSize: 16,
         textAlign: 'center',
         marginTop: 50,
-        color: '#333',
+        color: '#FFFFFF',
     },
     item: {
         padding: 10,
         borderBottomWidth: 1,
-        borderBottomColor: '#fff',
+        borderBottomColor: '#3498DB',
     },
     songTitle: {
         fontSize: 16,
         fontWeight: 'bold',
+        color: '#FFFFFF',
     },
     artist: {
         fontSize: 14,
-        color: '#666',
+        color: '#B0E0FE',
     },
 });
