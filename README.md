@@ -1,25 +1,30 @@
 # SoundRevive
 
-**SoundRevive** is a mobile application built with **React Native** and **TypeScript** for the front end, and **Firebase** for the backend. The app envisions a return to the 2016-2017 SoundCloud era through decentralized royalty management and AI systems that promote underground artists. This project is part of a broader vision to democratize the music industry with innovative technology.
+[Watch Demo](https://www.youtube.com/watch?v=yz3bGXdSrzQ&feature=youtu.be)
+
+**SoundRevive** is a cross-platform music streaming app built using **React Native** and **TypeScript**. It integrates the **Jamendo API** for royalty-free music streaming and uses **Firebase** for backend services, including user authentication and database management.
+
+## Tech Stack
+
+- **Frontend**: React Native, TypeScript
+- **Backend**: Firebase (Authentication, Firestore, Cloud Storage)
+- **API**: Jamendo API (Music Streaming)
+- **Platforms**: iOS, Android
 
 ## Features
-- **Music Player**: Integrated with the **Jamendo API** to provide a seamless music streaming experience.
-- **Decentralized Royalty Management**: Utilizing technology to create fairer revenue streams for artists.
-- **AI-Powered Artist Promotion**: Promotes underground artists through AI-driven systems.
-- **User Interface**: Built with React Native to ensure smooth performance on both iOS and Android devices.
 
-## Project Overview
-- **Team Size**: 3 developers
-- **Role**: Led the project, overseeing both the frontend and backend development.
-- **Technologies Used**:
-  - Frontend: React Native, TypeScript
-  - Backend: Firebase
-  - API Integration: Jamendo API
+- **Music Streaming**: Seamless integration with the Jamendo API for royalty-free music.
+- **Cross-Platform**: Optimized for both iOS and Android with React Native.
+- **Firebase Backend**: Real-time database, authentication, and cloud storage.
 
-## Vision
-SoundRevive aims to democratize the music industry by leveraging decentralized systems and AI to give independent artists the tools and exposure they need. By returning to the ethos of the 2016-2017 SoundCloud era, the app fosters creativity, community, and fair compensation for artists.
+## Role & Contributions
 
-## Demo
-Check out the demo of the app here:
+- **Project Lead & Full-Stack Developer**: Designed the app architecture, led frontend and backend development, and integrated the Jamendo API.
+- **Team**: Collaborated with a team of 3 developers.
 
-[SoundRevive Demo](https://www.youtube.com/watch?v=yz3bGXdSrzQ&feature=youtu.be)
+## Future Enhancements
+
+Although current features focus on music streaming, future plans include incorporating AI for music recommendation and exploring decentralized royalty management systems.
+
+---
+
