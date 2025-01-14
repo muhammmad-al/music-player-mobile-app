@@ -1,7 +1,5 @@
 # SoundRevive
 
-[Watch Demo](https://www.youtube.com/watch?v=yz3bGXdSrzQ&feature=youtu.be)
-
 **SoundRevive** is a cross-platform music streaming app built using **React Native** and **TypeScript**. It integrates the **Jamendo API** for royalty-free music streaming and uses **Firebase** for backend services, including user authentication and database management.
 
 ## Tech Stack
