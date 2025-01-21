@@ -17,8 +17,7 @@
 
 ## Role & Contributions
 
-- **Project Lead & Full-Stack Developer**: Designed the app architecture, led frontend and backend development, and integrated the Jamendo API.
-- **Team**: Collaborated with a team of 3 developers.
+- **Project Lead & Full-Stack Developer**: Designed the app architecture, led frontend and backend development, and API integration.
 
 ## Future Enhancements
 
